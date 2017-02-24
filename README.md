@@ -1,4 +1,4 @@
 # CashbackAPI
 API Library for Cashback Engine
 
-***documentation to come***
+***documentation to come soon***
