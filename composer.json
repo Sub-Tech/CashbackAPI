@@ -1,0 +1,24 @@
+{
+  "name": "subtech/cashback-api",
+  "description": "Cashback Engine API",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Tom Wright",
+      "email": "contact@tomwright.me"
+    },
+    {
+      "name": "John Saunders",
+      "email": "john@yettimedia.co.uk"
+    }
+  ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "CashbackApi\\": "src/"
+    }
+  }
+}
