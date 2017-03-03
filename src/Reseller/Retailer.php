@@ -121,7 +121,8 @@ class Retailer extends BaseApi
      * @param bool $draftSetup
      * @return bool|object
      */
-    public function getPaginated($categoryId, $search, $orderBy, $page, $records = 20, $liveSetup = false, $draftSetup = false, $status = null)
+    public function getPaginated($categoryId, $search, $orderBy, $page, $records = 20, $liveSetup = false,
+                                 $draftSetup = false, $status = null)
     {
         $data = new \stdClass();
         $data->category_id = $categoryId;

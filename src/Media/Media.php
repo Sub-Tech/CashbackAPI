@@ -8,7 +8,6 @@ use CashbackApi\BaseApi;
 class Media extends BaseApi
 {
 
-
     public function getMediaList($path, $type = null)
     {
         $data = new \stdClass();

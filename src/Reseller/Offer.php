@@ -206,7 +206,8 @@ class Offer extends BaseApi
      * @param null $retailerId
      * @return bool|object
      */
-    public function getPaginated($categoryId, $search, $orderBy, $page, $records = 20, $liveSetup = false, $draftSetup = false, $status = null, $retailerId = null)
+    public function getPaginated($categoryId, $search, $orderBy, $page, $records = 20, $liveSetup = false,
+                                 $draftSetup = false, $status = null, $retailerId = null)
     {
         $data = new \stdClass();
         $data->category_id = $categoryId;
