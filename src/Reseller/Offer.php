@@ -2,11 +2,7 @@
 
 namespace CashbackApi\Reseller;
 
-
-use CashbackApi\BaseApi;
-
-
-class Offer extends BaseApi
+class Offer extends BaseReseller
 {
     /**
      * @var int|null

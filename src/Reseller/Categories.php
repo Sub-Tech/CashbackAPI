@@ -2,14 +2,11 @@
 
 namespace CashbackApi\Reseller;
 
-
-use CashbackApi\BaseApi;
-
 /**
  * Class Categories
  * @package CashbackApi\Reseller
  */
-class Categories extends BaseApi
+class Categories extends BaseReseller
 {
 
     /**
@@ -55,8 +52,8 @@ class Categories extends BaseApi
     public function addOfferToCategory($offerId, $categoryId)
     {
         $data = new \stdClass();
-        $data->offer_id = (int) $offerId;
-        $data->category_id = (int) $categoryId;
+        $data->offer_id = (int)$offerId;
+        $data->category_id = (int)$categoryId;
 
         return $this->doRequest('reseller/category/add-offer', $data);
     }
@@ -69,8 +66,8 @@ class Categories extends BaseApi
     public function removeOfferFromCategory($offerId, $categoryId)
     {
         $data = new \stdClass();
-        $data->offer_id = (int) $offerId;
-        $data->category_id = (int) $categoryId;
+        $data->offer_id = (int)$offerId;
+        $data->category_id = (int)$categoryId;
 
         return $this->doRequest('reseller/category/remove-offer', $data);
     }
@@ -83,8 +80,8 @@ class Categories extends BaseApi
     public function addRetailerToCategory($retailerId, $categoryId)
     {
         $data = new \stdClass();
-        $data->retailer_id = (int) $retailerId;
-        $data->category_id = (int) $categoryId;
+        $data->retailer_id = (int)$retailerId;
+        $data->category_id = (int)$categoryId;
 
         return $this->doRequest('reseller/category/add-retailer', $data);
     }
@@ -97,8 +94,8 @@ class Categories extends BaseApi
     public function removeRetailerFromCategory($retailerId, $categoryId)
     {
         $data = new \stdClass();
-        $data->retailer_id = (int) $retailerId;
-        $data->category_id = (int) $categoryId;
+        $data->retailer_id = (int)$retailerId;
+        $data->category_id = (int)$categoryId;
 
         return $this->doRequest('reseller/category/remove-retailer', $data);
     }
@@ -110,7 +107,7 @@ class Categories extends BaseApi
     public function getRetailerCategories($retailerId)
     {
         $data = new \stdClass();
-        $data->retailer_id = (int) $retailerId;
+        $data->retailer_id = (int)$retailerId;
 
         return $this->doRequest('reseller/category/get-retailer-categories', $data);
     }
@@ -122,7 +119,7 @@ class Categories extends BaseApi
     public function getOfferCategories($offerId)
     {
         $data = new \stdClass();
-        $data->offer_id = (int) $offerId;
+        $data->offer_id = (int)$offerId;
 
         return $this->doRequest('reseller/category/get-offer-categories', $data);
     }

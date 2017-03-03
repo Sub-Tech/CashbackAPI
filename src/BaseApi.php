@@ -4,7 +4,6 @@ namespace CashbackApi;
 
 use CashbackApi\Exception\ApiException;
 use CashbackApi\Media\Media;
-use CashbackApi\Reseller\Categories;
 
 /**
  * Class Api
@@ -118,10 +117,6 @@ class BaseApi
      */
     private static $apiMedia = null;
 
-    /**
-     * @var null|Categories
-     */
-    private static $apiCategories = null;
     /**
      * @var string
      */
@@ -841,18 +836,6 @@ class BaseApi
         return self::$apiMedia;
     }
 
-    /**
-     * @return Categories|null
-     */
-    public function getApiCategories()
-    {
-        if (isset(self::$apiCategories)) {
-            return self::$apiCategories;
-        }
-        $apiCategories = new Categories();
-        self::$apiCategories = $apiCategories;
-        return self::$apiCategories;
-    }
 
 
 }

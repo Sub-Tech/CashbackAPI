@@ -2,15 +2,13 @@
 
 namespace CashbackApi\Reseller;
 
-
-use CashbackApi\BaseApi;
 use CashbackApi\Exception\ApiException;
 
 /**
  * Class Retailer
  * @package CashbackApi\Reseller
  */
-class Retailer extends BaseApi
+class Retailer extends BaseReseller
 {
     /**
      * @var

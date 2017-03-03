@@ -8,14 +8,11 @@
 
 namespace CashbackApi\Reseller;
 
-
-use CashbackApi\BaseApi;
-
 /**
  * Class Stats
  * @package CashbackApi\Reseller
  */
-class Stats extends BaseApi
+class Stats extends BaseReseller
 {
 
 }

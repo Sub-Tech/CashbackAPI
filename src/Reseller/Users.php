@@ -1,21 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: johnsaunders
- * Date: 20/12/2016
- * Time: 16:49
- */
-
 namespace CashbackApi\Reseller;
 
-
-use CashbackApi\BaseApi;
 
 /**
  * Class Users
  * @package CashbackApi\Reseller
  */
-class Users extends BaseApi
+class Users extends BaseReseller
 {
 
     /**

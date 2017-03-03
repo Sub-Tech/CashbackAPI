@@ -9,7 +9,7 @@ use CashbackApi\BaseApi;
  * Class User
  * @package CashbackApi\Reseller
  */
-class User extends BaseApi
+class User extends BaseReseller
 {
     /**
      * @var null|object

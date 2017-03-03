@@ -2,14 +2,11 @@
 
 namespace CashbackApi\Reseller;
 
-
-use CashbackApi\BaseApi;
-
 /**
  * Class Whitelabel
  * @package CashbackApi\Reseller
  */
-class Whitelabel extends BaseApi
+class Whitelabel extends BaseReseller
 {
 
 
@@ -24,12 +21,14 @@ class Whitelabel extends BaseApi
         return $this->doRequest('reseller/whitelabel/create', $data);
     }
 
-    public function getAll(){
+    public function getAll()
+    {
 
         return $this->doRequest('reseller/whitelabel/get-all');
     }
 
-    public function get($whiteLabelId=null){
+    public function get($whiteLabelId = null)
+    {
         $data = new \stdClass();
         $data->white_label_id = $whiteLabelId;
         return $this->doRequest('reseller/whitelabel/get', $data);
