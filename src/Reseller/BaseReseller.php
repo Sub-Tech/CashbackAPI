@@ -2,8 +2,6 @@
 namespace CashbackApi\Reseller;
 
 use CashbackApi\BaseApi;
-use CashbackApi\Reseller\Categories;
-use CashbackApi\Reseller\Restrictions;
 
 /**
  * Class BaseReseller
