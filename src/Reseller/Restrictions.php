@@ -1,7 +1,8 @@
 <?php
 namespace CashbackApi\Reseller;
 
-use CashbackApi\Restrictions\RestrictionTrait;
+use CashbackApi\Restrictions\AddRestrictionTrait;
+use CashbackApi\Restrictions\ListRestrictionTrait;
 
 /**
  * Class Restrictions
@@ -10,8 +11,8 @@ use CashbackApi\Restrictions\RestrictionTrait;
 class Restrictions extends BaseReseller
 {
 
-    use RestrictionTrait;
-
-
-
+    use AddRestrictionTrait;
+    public $AddRestrictionBaseUrl = 'reseller';
+    use ListRestrictionTrait;
+    public $listRestrictionBaseUrl = 'reseller';
 }
