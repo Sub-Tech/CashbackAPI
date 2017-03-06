@@ -3,6 +3,7 @@ namespace CashbackApi\Reseller;
 
 use CashbackApi\Restrictions\AddRestrictionTrait;
 use CashbackApi\Restrictions\ListRestrictionTrait;
+use CashbackApi\Restrictions\RemoveRestrictionTrait;
 
 /**
  * Class Restrictions
@@ -12,7 +13,9 @@ class Restrictions extends BaseReseller
 {
 
     use AddRestrictionTrait;
-    public $AddRestrictionBaseUrl = 'reseller';
+    public $addRestrictionBaseUrl = 'reseller';
     use ListRestrictionTrait;
     public $listRestrictionBaseUrl = 'reseller';
+    use RemoveRestrictionTrait;
+    public $removeRestrictionBaseUrl = 'reseller';
 }
