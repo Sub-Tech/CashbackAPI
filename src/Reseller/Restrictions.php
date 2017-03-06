@@ -13,9 +13,9 @@ class Restrictions extends BaseReseller
 {
 
     use AddRestrictionTrait;
-    public $addRestrictionBaseUrl = 'reseller';
+    public $addRestrictionPath = 'reseller';
     use ListRestrictionTrait;
-    public $listRestrictionBaseUrl = 'reseller';
+    public $listRestrictionPath = 'reseller';
     use RemoveRestrictionTrait;
-    public $removeRestrictionBaseUrl = 'reseller';
+    public $removeRestrictionPath = 'reseller';
 }

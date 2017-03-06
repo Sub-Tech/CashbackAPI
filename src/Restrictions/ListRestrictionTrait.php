@@ -6,7 +6,7 @@ namespace CashbackApi\Restrictions;
 trait ListRestrictionTrait
 {
 
-    public $listRestrictionBaseUrl;
+    public $listRestrictionPath;
 
     /**
      * @param bool $withDescription
@@ -16,7 +16,7 @@ trait ListRestrictionTrait
     {
         $data = new \stdClass();
         $data->with_description = $withDescription;
-        return $this->doRequest($this->listRestrictionBaseUrl . '/restrictions/get-types', $data);
+        return $this->doRequest($this->listRestrictionPath . '/restrictions/get-types', $data);
     }
 
 
@@ -25,7 +25,7 @@ trait ListRestrictionTrait
         $data = new \stdClass();
         $data->retailer_id = $retailerId;
 
-        return $this->doRequest($this->listRestrictionBaseUrl . '/restrictions/retailer/list', $data);
+        return $this->doRequest($this->listRestrictionPath . '/restrictions/retailer/list', $data);
     }
 
     public function listOfferRestrictions($offerId = null, $restriction = null)
@@ -33,7 +33,7 @@ trait ListRestrictionTrait
         $data = new \stdClass();
         $data->offer_id = $offerId;
 
-        return $this->doRequest($this->listRestrictionBaseUrl . '/restrictions/offer/list', $data);
+        return $this->doRequest($this->listRestrictionPath . '/restrictions/offer/list', $data);
     }
 
     public function listCategoryRestrictions($categoryId = null, $restriction = null)
@@ -41,7 +41,7 @@ trait ListRestrictionTrait
         $data = new \stdClass();
         $data->category_id = $categoryId;
 
-        return $this->doRequest($this->listRestrictionBaseUrl . '/restrictions/category/list', $data);
+        return $this->doRequest($this->listRestrictionPath . '/restrictions/category/list', $data);
     }
 
     public function listWhitelabelRestrictions($whitelabelId = null, $restriction = null)
@@ -49,7 +49,7 @@ trait ListRestrictionTrait
         $data = new \stdClass();
         $data->whitelabel_id = $whitelabelId;
 
-        return $this->doRequest($this->listRestrictionBaseUrl . '/restrictions/whitelabel/list', $data);
+        return $this->doRequest($this->listRestrictionPath . '/restrictions/whitelabel/list', $data);
     }
 
     public function addMinAgeRestrictionToRetailer()
