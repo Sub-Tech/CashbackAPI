@@ -14,7 +14,14 @@ class Restrictions extends BaseReseller
     use AddRestrictionTrait;
     use ListRestrictionTrait;
     use RemoveRestrictionTrait;
-    
+
+    /**
+     * Restrictions constructor.
+     * @param null $apiKey
+     * @param null $url
+     * @param null $sessionToken
+     * @param null $timeSessionGenerated
+     */
     public function __construct($apiKey = null, $url = null, $sessionToken = null, $timeSessionGenerated = null)
     {
         parent::__construct($apiKey, $url, $sessionToken, $timeSessionGenerated);
