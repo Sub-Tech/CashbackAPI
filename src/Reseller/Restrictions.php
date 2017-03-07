@@ -18,4 +18,5 @@ class Restrictions extends BaseReseller
     public $listRestrictionPath = 'reseller';
     use RemoveRestrictionTrait;
     public $removeRestrictionPath = 'reseller';
+
 }

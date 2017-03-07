@@ -35,7 +35,7 @@ trait AddRestrictionTrait
      * @param null $restriction
      * @return mixed
      */
-    public function addRestrictionToRetailer($retailerId = null, $restriction = null)
+    protected function addRestrictionToRetailer($retailerId = null, $restriction = null)
     {
         $data = new \stdClass();
         $data->retailer_id = $retailerId;
@@ -48,7 +48,7 @@ trait AddRestrictionTrait
      * @param null $restriction
      * @return mixed
      */
-    public function addRestrictionToOffer($offerId = null, $restriction = null)
+    protected function addRestrictionToOffer($offerId = null, $restriction = null)
     {
         $data = new \stdClass();
         $data->offer_id = $offerId;
@@ -61,7 +61,7 @@ trait AddRestrictionTrait
      * @param null $restriction
      * @return mixed
      */
-    public function addRestrictionToCategory($categoryId = null, $restriction = null)
+    protected function addRestrictionToCategory($categoryId = null, $restriction = null)
     {
         $data = new \stdClass();
         $data->category_id = $categoryId;
@@ -74,7 +74,7 @@ trait AddRestrictionTrait
      * @param null $restriction
      * @return mixed
      */
-    public function addRestrictionToWhitelabel($whitelabelId = null, $restriction = null)
+    protected function addRestrictionToWhitelabel($whitelabelId = null, $restriction = null)
     {
         $data = new \stdClass();
         $data->whitelabel_id = $whitelabelId;
