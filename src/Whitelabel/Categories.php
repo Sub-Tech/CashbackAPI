@@ -1,23 +1,13 @@
 <?php
 
-namespace CashbackApi\Reseller;
-
-use CashbackApi\Categories\AddCategoryTrait;
+namespace CashbackApi\Whitelabel;
 
 /**
  * Class Categories
  * @package CashbackApi\Reseller
  */
-class Categories extends BaseReseller
+class Categories extends BaseWhitelabel
 {
-    use AddCategoryTrait;
-
-    public function __construct($apiKey = null, $url = null, $sessionToken = null, $timeSessionGenerated = null)
-    {
-        parent::__construct($apiKey, $url, $sessionToken, $timeSessionGenerated);
-
-        $this->addCategoryPath = 'reseller';
-    }
 
     /**
      * @param null $validateFields
@@ -54,6 +44,19 @@ class Categories extends BaseReseller
         return $this->doRequest('reseller/category/get-all', $data);
     }
 
+    /**
+     * @param int $offerId
+     * @param int $categoryId
+     * @return bool|object
+     */
+    public function addOfferToCategory($offerId, $categoryId)
+    {
+        $data = new \stdClass();
+        $data->offer_id = (int)$offerId;
+        $data->category_id = (int)$categoryId;
+
+        return $this->doRequest('reseller/category/add-offer', $data);
+    }
 
     /**
      * @param int $offerId
@@ -69,6 +72,19 @@ class Categories extends BaseReseller
         return $this->doRequest('reseller/category/remove-offer', $data);
     }
 
+    /**
+     * @param int $retailerId
+     * @param int $categoryId
+     * @return bool|object
+     */
+    public function addRetailerToCategory($retailerId, $categoryId)
+    {
+        $data = new \stdClass();
+        $data->retailer_id = (int)$retailerId;
+        $data->category_id = (int)$categoryId;
+
+        return $this->doRequest('reseller/category/add-retailer', $data);
+    }
 
     /**
      * @param int $retailerId
