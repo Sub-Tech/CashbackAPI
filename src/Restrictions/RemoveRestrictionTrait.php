@@ -2,40 +2,83 @@
 namespace CashbackApi\Restrictions;
 
 
+use CashbackApi\Exception\ApiException;
+
+
+/**
+ * Class RemoveRestrictionTrait
+ * @package CashbackApi\Restrictions
+ */
 trait RemoveRestrictionTrait
 {
     public $removeRestrictionPath;
 
-
-    public function removeRestrictionFromRetailer($retailerId = null, $restriction = null)
+    /**
+     * @param $restriction
+     * @param $type
+     * @param $id
+     * @return mixed
+     * @throws ApiException
+     */
+    protected function doRestrictionRemoval($restriction, $type, $id)
     {
-        $data = new \stdClass();
-        $data->retailer_id = $retailerId;
 
-        return $this->doRequest($this->removeRestrictionPath . '/restrictions/retailer/remove', $data);
+        $allowed = ['retailer', 'offer', 'category', 'whitelabel'];
+        if (!in_array($type, $allowed)) {
+            throw new ApiException('Incorrect Type used!');
+        }
+        $data = new \stdClass();
+        $typeField = $type . '_id';
+        $data->{$typeField} = $id;
+
+        if (is_numeric($restriction)) {
+            $data->restriction_id = $restriction;
+            $pathEnd = '-by-id';
+        } else {
+            $data->restriction_type = $restriction;
+            $pathEnd = '-by-type';
+        }
+
+        return $this->doRequest($this->removeRestrictionPath . '/restrictions/' . $type . '/remove' . $pathEnd, $data);
     }
 
-    public function removeRestrictionFromOffer($offerId = null, $restriction = null)
+    /**
+     * @param $retailerId
+     * @param $restriction int|string|array (restriction type| restriction id)
+     * @return mixed
+     */
+    public function removeRestrictionFromRetailer($retailerId, $restriction)
     {
-        $data = new \stdClass();
-        $data->offer_id = $offerId;
-
-        return $this->doRequest($this->removeRestrictionPath . '/restrictions/offer/remove', $data);
+        return $this->doRestrictionRemoval($restriction, 'retailer', $retailerId);
     }
 
-    public function removeRestrictionFromCategory($categoryId = null, $restriction = null)
+    /**
+     * @param $offerId
+     * @param $restriction int|string|array (restriction type| restriction id)
+     * @return mixed
+     */
+    public function removeRestrictionFromOffer($offerId, $restriction)
     {
-        $data = new \stdClass();
-        $data->category_id = $categoryId;
-
-        return $this->doRequest($this->removeRestrictionPath . '/restrictions/category/remove', $data);
+        return $this->doRestrictionRemoval($restriction, 'offer', $offerId);
     }
 
-    public function removeRestrictionFromWhitelabel($whitelabelId = null, $restriction = null)
+    /**
+     * @param $categoryId
+     * @param $restriction int|string|array (restriction type| restriction id)
+     * @return mixed
+     */
+    public function removeRestrictionFromCategory($categoryId, $restriction)
     {
-        $data = new \stdClass();
-        $data->whitelabel_id = $whitelabelId;
+        return $this->doRestrictionRemoval($restriction, 'category', $categoryId);
+    }
 
-        return $this->doRequest($this->removeRestrictionPath . '/restrictions/whitelabel/remove', $data);
+    /**
+     * @param $whitelabelId
+     * @param $restriction  int|string|array (restriction type| restriction id)
+     * @return mixed
+     */
+    public function removeRestrictionFromWhitelabel($whitelabelId, $restriction)
+    {
+        return $this->doRestrictionRemoval($restriction, 'whitelabel', $whitelabelId);
     }
 }

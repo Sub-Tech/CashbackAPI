@@ -3,6 +3,12 @@
 namespace CashbackApi\Restrictions;
 
 
+use CashbackApi\Exception\ApiException;
+
+/**
+ * Class AddRestrictionTrait
+ * @package CashbackApi\Restrictions
+ */
 trait AddRestrictionTrait
 {
 
@@ -91,6 +97,10 @@ trait AddRestrictionTrait
      */
     protected function mapToType($toType, $id, object $restriction)
     {
+        $allowed = ['retailer', 'offer', 'category', 'whitelabel'];
+        if (!in_array($toType, $allowed)) {
+            throw new ApiException('Incorrect Type used!');
+        }
         switch ($toType) {
             case 'retailer':
                 return $this->addRestrictionToRetailer($id, $restriction);

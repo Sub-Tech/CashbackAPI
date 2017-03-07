@@ -2,7 +2,10 @@
 
 namespace CashbackApi\Restrictions;
 
-
+/**
+ * Class ListRestrictionTrait
+ * @package CashbackApi\Restrictions
+ */
 trait ListRestrictionTrait
 {
 
@@ -20,7 +23,7 @@ trait ListRestrictionTrait
     }
 
 
-    public function listRetailerRestrictions($retailerId = null, $restriction = null)
+    public function listRetailerRestrictions($retailerId = null)
     {
         $data = new \stdClass();
         $data->retailer_id = $retailerId;
@@ -28,7 +31,7 @@ trait ListRestrictionTrait
         return $this->doRequest($this->listRestrictionPath . '/restrictions/retailer/list', $data);
     }
 
-    public function listOfferRestrictions($offerId = null, $restriction = null)
+    public function listOfferRestrictions($offerId = null)
     {
         $data = new \stdClass();
         $data->offer_id = $offerId;
@@ -36,7 +39,7 @@ trait ListRestrictionTrait
         return $this->doRequest($this->listRestrictionPath . '/restrictions/offer/list', $data);
     }
 
-    public function listCategoryRestrictions($categoryId = null, $restriction = null)
+    public function listCategoryRestrictions($categoryId = null)
     {
         $data = new \stdClass();
         $data->category_id = $categoryId;
@@ -44,7 +47,7 @@ trait ListRestrictionTrait
         return $this->doRequest($this->listRestrictionPath . '/restrictions/category/list', $data);
     }
 
-    public function listWhitelabelRestrictions($whitelabelId = null, $restriction = null)
+    public function listWhitelabelRestrictions($whitelabelId = null)
     {
         $data = new \stdClass();
         $data->whitelabel_id = $whitelabelId;
@@ -52,10 +55,5 @@ trait ListRestrictionTrait
         return $this->doRequest($this->listRestrictionPath . '/restrictions/whitelabel/list', $data);
     }
 
-    public function addMinAgeRestrictionToRetailer()
-    {
-        /**
-         * TODO make this shit make sense!
-         */
-    }
+
 }
