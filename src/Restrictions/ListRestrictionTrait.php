@@ -22,7 +22,10 @@ trait ListRestrictionTrait
         return $this->doRequest($this->listRestrictionPath . '/restrictions/get-types', $data);
     }
 
-
+    /**
+     * @param null $retailerId
+     * @return mixed
+     */
     public function listRetailerRestrictions($retailerId = null)
     {
         $data = new \stdClass();
@@ -31,6 +34,10 @@ trait ListRestrictionTrait
         return $this->doRequest($this->listRestrictionPath . '/restrictions/retailer/list', $data);
     }
 
+    /**
+     * @param null $offerId
+     * @return mixed
+     */
     public function listOfferRestrictions($offerId = null)
     {
         $data = new \stdClass();
@@ -39,6 +46,10 @@ trait ListRestrictionTrait
         return $this->doRequest($this->listRestrictionPath . '/restrictions/offer/list', $data);
     }
 
+    /**
+     * @param null $categoryId
+     * @return mixed
+     */
     public function listCategoryRestrictions($categoryId = null)
     {
         $data = new \stdClass();
@@ -47,6 +58,10 @@ trait ListRestrictionTrait
         return $this->doRequest($this->listRestrictionPath . '/restrictions/category/list', $data);
     }
 
+    /**
+     * @param null $whitelabelId
+     * @return mixed
+     */
     public function listWhitelabelRestrictions($whitelabelId = null)
     {
         $data = new \stdClass();
