@@ -26,6 +26,17 @@ trait AddRestrictionTrait
     }
 
     /**
+     * @param bool $withDescription
+     * @return mixed
+     */
+    public function getResourceTypes($withDescription = false)
+    {
+        $data = new \stdClass();
+        $data->with_description = $withDescription;
+        return $this->doRequest($this->addRestrictionPath . '/restrictions/get-resource-types', $data);
+    }
+
+    /**
      * @param $data
      * @param object $restriction
      */
