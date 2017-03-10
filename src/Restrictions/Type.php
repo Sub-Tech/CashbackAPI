@@ -3,6 +3,7 @@
 namespace CashbackApi\Restrictions;
 
 use CashbackApi\BaseApi;
+use CashbackApi\Reseller\Whitelabel;
 use Giraffe\Giraffe;
 
 /**
@@ -13,14 +14,34 @@ class Type
 {
     public static $uniqueId;
     protected $typeData = false;
+    protected $restriction = null;
+    /**
+     * @var BaseApi
+     */
+    protected $api;
+    /**
+     * @var Whitelabel
+     */
+    protected $whitelabelApi;
 
     /**
-     * Types constructor.
-     * @param $typeData | object
+     * Type constructor.
+     * @param $typeData
+     * @param BaseApi|null $api
+     * @param null $restriction
      */
-    public function __construct($typeData, BaseApi $api = null)
+    public function __construct($typeData, BaseApi $api = null, $restriction = null)
     {
         $this->setTypeData($typeData);
+        $this->api = $api;
+        $this->setRestriction($restriction);
+    }
+
+    /**
+     * @param BaseApi $api
+     */
+    public function setApi(BaseApi $api)
+    {
         $this->api = $api;
     }
 
@@ -77,21 +98,38 @@ class Type
         return $returnArray;
     }
 
+    /**
+     * @param $inputName
+     * @return mixed
+     */
     public static function getLabelName($inputName)
     {
         return str_replace('Ip', 'IP', ucwords(str_replace('_', ' ', $inputName)));
     }
 
-
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         return $this->getTypeData()->description ?? 'no description';
 
     }
 
+    /**
+     * @return mixed
+     */
     public function getTitle()
     {
         return static::getLabelName($this->getTypeData()->type ?? 'no title');
+    }
+
+    /**
+     * @return bool
+     */
+    public function getType()
+    {
+        return $this->getTypeData()->type ?? false;
     }
 
     public function getInputsHtml($delimited = ',')
@@ -106,6 +144,7 @@ class Type
                 $i = static::$uniqueId++;
                 $name = $arg->input_name;
                 $returnValue .= '<div><label>' . static::getLabelName($name) . '</label>';
+                $value = $this->getDefinitiveFieldValue($name);
                 switch ($arg->type) {
                     case 'string':
                     case 'int':
@@ -114,11 +153,11 @@ class Type
                             $type = 'number';
                         }
                         $returnValue .= '<input type="' . $type . '" name="' .
-                            $name . '" class="restrictionInput_' . $i . '" />';
+                            $name . '" class="restrictionInput_' . $i . '" value="' . $value . '" />';
                         break;
                     case 'array':
                         $returnValue .= '<textarea name="' .
-                            $name . '" class="restrictionInput_' . $i . '" /></textarea>';
+                            $name . '" class="restrictionInput_' . $i . '" />' . $value . '</textarea>';
                         break;
                 }
                 $returnValue .= '</div>';
@@ -128,5 +167,75 @@ class Type
         return $returnValue;
     }
 
+    public function getDefinitiveFieldValue($key)
+    {
+        $fieldsArray = $this->getTypeData()->definitive_fields;
+
+        if (!Giraffe::canIterate($fieldsArray)) {
+            return '';
+        }
+        Giraffe::notification(print_r($fieldsArray, true));
+        foreach ($fieldsArray as $fieldKey) {
+            if ($key == $fieldKey) {
+                return print_r($this->getRestriction()->{$key},true);
+            }
+        }
+
+
+        return '';
+    }
+
+    /**
+     * @return BaseApi | bool
+     */
+    public function getApi()
+    {
+        if (!isset($api)) {
+            return false;
+        }
+        return $api;
+    }
+
+    /**
+     * @return bool|Whitelabel
+     */
+    public function getWhitelabelApi()
+    {
+
+        if (isset($this->whitelabelApi)) {
+            return $this->whitelabelApi;
+        }
+
+        if ($this->getApi()) {
+            return $this->whitelabelApi = new Whitelabel();
+        }
+        return false;
+    }
+
+    public function getWhitelabels()
+    {
+        $whitelabelApi = $this->getWhitelabelApi();
+        if (!$whitelabelApi) {
+            return false;
+        }
+        return $this->getWhitelabelApi()->getAll();
+
+    }
+
+    /**
+     * @return null
+     */
+    public function getRestriction()
+    {
+        return $this->restriction;
+    }
+
+    /**
+     * @param null $restriction
+     */
+    public function setRestriction($restriction)
+    {
+        $this->restriction = $restriction;
+    }
 
 }
