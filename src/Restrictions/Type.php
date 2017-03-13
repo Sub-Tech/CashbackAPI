@@ -12,9 +12,22 @@ use Giraffe\Giraffe;
  */
 class Type
 {
+    /**
+     * @var
+     */
     public static $uniqueId;
+    /**
+     * @var bool
+     */
     protected $typeData = false;
+    /**
+     * @var null
+     */
     protected $restriction = null;
+    /**
+     * @var array
+     */
+    protected static $allWhitelabels;
     /**
      * @var BaseApi
      */
@@ -223,17 +236,14 @@ class Type
 
     public function getWhitelabels()
     {
+        if (isset(static::$allWhitelabels)) {
+            return static::$allWhitelabels;
+        }
         $whitelabelApi = $this->getWhitelabelApi();
         if (!$whitelabelApi) {
             return false;
         }
-        $return = $this->getWhitelabelApi()->getAll();
-
-        if (!$return) {
-            return $this->getWhitelabelApi()->getLastErrorMessageAll();
-        }
-
-        return $return;
+        return static::$allWhitelabels = $this->getWhitelabelApi()->getAll();
 
     }
 
