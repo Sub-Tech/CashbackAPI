@@ -23,12 +23,12 @@ class Whitelabel extends BaseReseller
 
     public function getAll()
     {
-
         return $this->doRequest('reseller/whitelabel/get-all');
     }
 
     public function get($whiteLabelId = null)
     {
+
         $data = new \stdClass();
         $data->white_label_id = $whiteLabelId;
         return $this->doRequest('reseller/whitelabel/get', $data);

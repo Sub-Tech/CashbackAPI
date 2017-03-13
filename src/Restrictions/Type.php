@@ -156,8 +156,8 @@ class Type
                             $name . '" class="restrictionInput_' . $i . '" value="' . $value . '" />';
                         break;
                     case 'array':
-                        $returnValue .= '<textarea name="' .
-                            $name . '" class="restrictionInput_' . $i . '" />' . $value . '</textarea>';
+                        $returnValue .= '<div><textarea name="' .
+                            $name . '" class="restrictionInput_' . $i . '" >' . $value . '</textarea></div>';
                         break;
                 }
                 $returnValue .= '</div>';
@@ -169,15 +169,24 @@ class Type
 
     public function getDefinitiveFieldValue($key)
     {
+
         $fieldsArray = $this->getTypeData()->definitive_fields;
 
         if (!Giraffe::canIterate($fieldsArray)) {
             return '';
         }
-        Giraffe::notification(print_r($fieldsArray, true));
+
         foreach ($fieldsArray as $fieldKey) {
             if ($key == $fieldKey) {
-                return print_r($this->getRestriction()->{$key},true);
+
+                $restrictionValue = $this->getRestriction()->{$key}??false;
+                if (!is_array($restrictionValue) && $restrictionValue) {
+
+                    return $restrictionValue;
+                } elseif (is_array($restrictionValue) && count($restrictionValue)) {
+                    return join(',', $restrictionValue);
+                }
+
             }
         }
 
@@ -190,10 +199,10 @@ class Type
      */
     public function getApi()
     {
-        if (!isset($api)) {
+        if (!isset($this->api)) {
             return false;
         }
-        return $api;
+        return $this->api;
     }
 
     /**
@@ -218,7 +227,13 @@ class Type
         if (!$whitelabelApi) {
             return false;
         }
-        return $this->getWhitelabelApi()->getAll();
+        $return = $this->getWhitelabelApi()->getAll();
+
+        if (!$return) {
+            return $this->getWhitelabelApi()->getLastErrorMessageAll();
+        }
+
+        return $return;
 
     }
 
