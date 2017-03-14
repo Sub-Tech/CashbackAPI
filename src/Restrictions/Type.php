@@ -42,8 +42,14 @@ class Type
      * @var bool
      */
     protected $isReseller = false;
-
+    /**
+     * @var null|array
+     */
     protected $offer = null;
+    /**
+     * @var null
+     */
+    protected $retailerId = null;
 
     /**
      * Type constructor.
@@ -51,12 +57,13 @@ class Type
      * @param BaseApi|null $api
      * @param null $restriction
      */
-    public function __construct($typeData, BaseApi $api = null, $restriction = null)
+    public function __construct($typeData, BaseApi $api = null, $restriction = null, $retailerId = null)
     {
         $this->isReseller = is_a($api, 'CashbackApi\\BaseReseller') ? true : false;
         $this->setTypeData($typeData);
         $this->api = $api;
         $this->setRestriction($restriction);
+        $this->setRetailerId($retailerId);
     }
 
     /**
@@ -260,12 +267,12 @@ class Type
      * @param null $retailerId
      * @return ResellerOffer|WhitelabelOffer
      */
-    public function getOffers($retailerId = null)
+    public function getOffers()
     {
-        if (!is_numeric($retailerId)) {
+        $retailerId = $this->getRetailerId();
+        if (!is_numeric($this->getRetailerId())) {
             return false;
         }
-
         if (!isset($this->offer)) {
             $this->offer = [];
         }
@@ -293,6 +300,22 @@ class Type
     public function setRestriction($restriction)
     {
         $this->restriction = $restriction;
+    }
+
+    /**
+     * @return null
+     */
+    public function getRetailerId()
+    {
+        return $this->retailerId;
+    }
+
+    /**
+     * @param null $retailerId
+     */
+    public function setRetailerId($retailerId)
+    {
+        $this->retailerId = $retailerId;
     }
 
 }
