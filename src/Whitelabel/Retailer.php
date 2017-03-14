@@ -65,7 +65,7 @@ class Retailer extends BaseWhitelabel
         $data->inlcude_live_setup = true;
         $data->include_restrictions = $restrictions;
         $data->include_restricted = $restricted;
-        return $this->doRequest('reseller/retailer/get-all', $data);
+        return $this->doRequest('whitelabel/retailer/get-all', $data);
     }
 
 
@@ -80,7 +80,7 @@ class Retailer extends BaseWhitelabel
      * @return bool|object
      */
     public function getPaginated($categoryId, $search, $orderBy, $page, $records = 20, $liveSetup = false,
-                                 $draftSetup = false, $status = null, $restrictions = false, $restricted = false)
+                                 $status = null, $restrictions = false, $restricted = false)
     {
         $data = new \stdClass();
         $data->category_id = $categoryId;
@@ -89,11 +89,10 @@ class Retailer extends BaseWhitelabel
         $data->page = $page;
         $data->per_page = $records;
         $data->include_live_setup = $liveSetup;
-        $data->include_draft_setup = $draftSetup;
         $data->status = $status;
         $data->include_restrictions = $restrictions;
-        $data->restricted = $restricted;
-        return $this->doRequest('reseller/retailer/get-paginated', $data);
+        $data->include_restricted = $restricted;
+        return $this->doRequest('whitelabel/retailer/get-paginated', $data);
     }
 
     /**
@@ -108,8 +107,8 @@ class Retailer extends BaseWhitelabel
         $data->search = $search;
         $data->status = $status;
         $data->include_restrictions = $restrictions;
-        $data->restricted = $restricted;
-        return $this->doRequest('reseller/retailer/get-total', $data);
+        $data->include_restricted = $restricted;
+        return $this->doRequest('whitelabel/retailer/get-total', $data);
     }
 
 
@@ -126,8 +125,8 @@ class Retailer extends BaseWhitelabel
         $data->include_live_setup = $live;
         $data->include_draft_setup = $draft;
         $data->restrictions = $restrictions;
-        $data->restricted = $restricted;
-        return $this->doRequest('reseller/retailer/get', $data);
+        $data->include_restricted = $restricted;
+        return $this->doRequest('whitelabel/retailer/get', $data);
     }
 
 
