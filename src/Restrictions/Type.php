@@ -38,6 +38,12 @@ class Type
      * @var Whitelabel
      */
     protected $whitelabelApi;
+    /**
+     * @var bool
+     */
+    protected $isReseller = false;
+
+    protected $offer = null;
 
     /**
      * Type constructor.
@@ -47,6 +53,7 @@ class Type
      */
     public function __construct($typeData, BaseApi $api = null, $restriction = null)
     {
+        $this->isReseller = is_a($api, 'CashbackApi\\BaseReseller') ? true : false;
         $this->setTypeData($typeData);
         $this->api = $api;
         $this->setRestriction($restriction);
@@ -249,11 +256,25 @@ class Type
 
     }
 
+    /**
+     * @param null $retailerId
+     * @return ResellerOffer|WhitelabelOffer
+     */
     public function getOffers($retailerId = null)
     {
         if (!is_numeric($retailerId)) {
             return false;
         }
+
+        if (!isset($this->offer)) {
+            $this->offer = [];
+        }
+        if (isset($this->offer[$retailerId])) {
+            return $this->offer[$retailerId];
+        }
+        $this->offer[$retailerId] = ($this->isReseller) ? new ResellerOffer() : new WhitelabelOffer();
+        $this->offer[$retailerId]->setRetailerId($retailerId);
+        return $this->offer[$retailerId];
 
 
     }
