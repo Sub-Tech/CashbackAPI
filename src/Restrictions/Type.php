@@ -47,9 +47,17 @@ class Type
      */
     protected $offer = null;
     /**
-     * @var null
+     * @var null|int
      */
     protected $retailerId = null;
+    /**
+     * @var null|int
+     */
+    protected $offerId = null;
+    /**
+     * @var null|int
+     */
+    protected $resourceType = null;
 
     /**
      * Type constructor.
@@ -57,13 +65,19 @@ class Type
      * @param BaseApi|null $api
      * @param null $restriction
      */
-    public function __construct($typeData, BaseApi $api = null, $restriction = null, $retailerId = null)
+    public function __construct($typeData, BaseApi $api = null, $restriction = null, $resourceType = null, $resourceId = null)
     {
         $this->isReseller = is_a($api, 'CashbackApi\\Reseller\\BaseReseller') ? true : false;
         $this->setTypeData($typeData);
         $this->api = $api;
         $this->setRestriction($restriction);
-        $this->setRetailerId($retailerId);
+        $this->setResourceType($resourceType);
+        if ($resourceType == 'retailer') {
+            $this->setRetailerId($resourceId);
+        }
+        if ($resourceType == 'offer') {
+            $this->setOfferId($resourceId);
+        }
     }
 
     /**
@@ -326,6 +340,46 @@ class Type
     public function setRetailerId($retailerId)
     {
         $this->retailerId = $retailerId;
+    }
+
+    /**
+     * @param null|string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getOfferId()
+    {
+        return $this->offerId;
+    }
+
+    /**
+     * @param int|null $offerId
+     */
+    public function setOfferId($offerId)
+    {
+        $this->offerId = $offerId;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getResourceType()
+    {
+        return $this->resourceType;
+    }
+
+    /**
+     * @param int|null $resourceType
+     */
+    public function setResourceType($resourceType)
+    {
+        $this->resourceType = $resourceType;
     }
 
 }
