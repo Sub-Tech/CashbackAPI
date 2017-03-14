@@ -1,7 +1,10 @@
 <?php
 
 namespace CashbackApi\Whitelabel;
-
+/**
+ * Class Offer
+ * @package CashbackApi\Whitelabel
+ */
 class Offer extends BaseWhitelabel
 {
     /**

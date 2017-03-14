@@ -79,6 +79,10 @@ class Retailer extends BaseReseller
         return $this->doRequest('reseller/retailer/draft-setup-ready-for-live', $data);
     }
 
+    /**
+     * @param bool $restrictions
+     * @return bool|object
+     */
     public function getAll($restrictions = false)
     {
         $data = new \stdClass();
@@ -117,6 +121,8 @@ class Retailer extends BaseReseller
      * @param int $records
      * @param bool $liveSetup
      * @param bool $draftSetup
+     * @param null $status
+     * @param bool $restrictions
      * @return bool|object
      */
     public function getPaginated($categoryId, $search, $orderBy, $page, $records = 20, $liveSetup = false,
