@@ -5,12 +5,12 @@
   "license": "proprietary",
   "authors": [
     {
-      "name": "Tom Wright",
-      "email": "contact@tomwright.me"
-    },
-    {
       "name": "John Saunders",
       "email": "john@yettimedia.co.uk"
+    },
+    {
+      "name": "Tom Wright",
+      "email": "contact@tomwright.me"
     }
   ],
   "require": {
