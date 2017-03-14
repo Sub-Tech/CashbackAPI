@@ -59,7 +59,7 @@ class Type
      */
     public function __construct($typeData, BaseApi $api = null, $restriction = null, $retailerId = null)
     {
-        $this->isReseller = is_a($api, 'CashbackApi\\BaseReseller') ? true : false;
+        $this->isReseller = is_a($api, 'CashbackApi\\Reseller\\BaseReseller') ? true : false;
         $this->setTypeData($typeData);
         $this->api = $api;
         $this->setRestriction($restriction);
@@ -267,10 +267,10 @@ class Type
      * @param null $retailerId
      * @return ResellerOffer|WhitelabelOffer
      */
-    public function getOffers()
+    public function getOffersApi()
     {
         $retailerId = $this->getRetailerId();
-        if (!is_numeric($this->getRetailerId())) {
+        if (!is_numeric($retailerId)) {
             return false;
         }
         if (!isset($this->offer)) {
@@ -279,11 +279,21 @@ class Type
         if (isset($this->offer[$retailerId])) {
             return $this->offer[$retailerId];
         }
-        $this->offer[$retailerId] = ($this->isReseller) ? new ResellerOffer() : new WhitelabelOffer();
+
+        $this->offer[$retailerId] = ($this->isReseller) ? (new ResellerOffer()) : (new WhitelabelOffer());
         $this->offer[$retailerId]->setRetailerId($retailerId);
         return $this->offer[$retailerId];
 
 
+    }
+
+    public function getOffers()
+    {
+        $retailerId = $this->getRetailerId();
+        if (isset($retailerId)) {
+            return $this->getOffersApi()->getAll();
+        }
+        return false;
     }
 
     /**

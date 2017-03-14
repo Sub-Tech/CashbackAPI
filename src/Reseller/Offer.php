@@ -159,11 +159,14 @@ class Offer extends BaseReseller
         return $this->doRequest('reseller/retailer/offer/draft-setup-ready-for-live', $data);
     }
 
-    public function getAll()
+    public function getAll($retailerId = null)
     {
+
         $data = new \stdClass();
-        $data->awaiting_approval = true;
+        $data->retailer_id = $this->resolveRetailerId($retailerId);
         $data->include_draft_setup = true;
+        $data->include_live_setup = true;
+
         return $this->doRequest('reseller/retailer/offer/get-all', $data);
     }
 
