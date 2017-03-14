@@ -79,11 +79,12 @@ class Retailer extends BaseReseller
         return $this->doRequest('reseller/retailer/draft-setup-ready-for-live', $data);
     }
 
-    public function getAll()
+    public function getAll($restrictions = false)
     {
         $data = new \stdClass();
         $data->awaiting_approval = true;
         $data->include_draft_setup = true;
+        $data->include_restrictions = $restrictions;
         return $this->doRequest('reseller/retailer/get-all', $data);
     }
 
@@ -95,7 +96,7 @@ class Retailer extends BaseReseller
      * @param int $records
      * @return bool|object
      */
-    public function getPaginatedAwaitingApproval($search, $orderBy, $page, $records = 20)
+    public function getPaginatedAwaitingApproval($search, $orderBy, $page, $records = 20,$restrictions = false)
     {
         $data = new \stdClass();
         $data->search = $search;
@@ -104,6 +105,7 @@ class Retailer extends BaseReseller
         $data->per_page = $records;
         $data->awaiting_approval = true;
         $data->include_draft_setup = true;
+        $data->include_restrictions = $restrictions;
         return $this->doRequest('reseller/retailer/get-paginated', $data);
     }
 
@@ -118,7 +120,7 @@ class Retailer extends BaseReseller
      * @return bool|object
      */
     public function getPaginated($categoryId, $search, $orderBy, $page, $records = 20, $liveSetup = false,
-                                 $draftSetup = false, $status = null)
+                                 $draftSetup = false, $status = null,$restrictions = false)
     {
         $data = new \stdClass();
         $data->category_id = $categoryId;
@@ -129,6 +131,7 @@ class Retailer extends BaseReseller
         $data->include_live_setup = $liveSetup;
         $data->include_draft_setup = $draftSetup;
         $data->status = $status;
+        $data->include_restrictions = $restrictions;
         return $this->doRequest('reseller/retailer/get-paginated', $data);
     }
 
@@ -137,12 +140,13 @@ class Retailer extends BaseReseller
      * @param $search
      * @return bool|object
      */
-    public function getTotalRecords($categoryId, $search, $status = null)
+    public function getTotalRecords($categoryId, $search, $status = null,$restrictions = false)
     {
         $data = new \stdClass();
         $data->category_id = $categoryId;
         $data->search = $search;
         $data->status = $status;
+        $data->include_restrictions = $restrictions;
         return $this->doRequest('reseller/retailer/get-total', $data);
     }
 
@@ -239,12 +243,13 @@ class Retailer extends BaseReseller
      * @param bool $draft
      * @return bool|object
      */
-    public function get($id, $live = false, $draft = false)
+    public function get($id, $live = false, $draft = false, $restrictions = false)
     {
         $data = new \stdClass();
         $data->retailer_id = (int)$id;
         $data->include_live_setup = $live;
         $data->include_draft_setup = $draft;
+        $data->restrictions = $restrictions;
         return $this->doRequest('reseller/retailer/get', $data);
     }
 

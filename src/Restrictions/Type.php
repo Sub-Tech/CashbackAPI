@@ -4,6 +4,8 @@ namespace CashbackApi\Restrictions;
 
 use CashbackApi\BaseApi;
 use CashbackApi\Reseller\Whitelabel;
+use CashbackApi\Reseller\Offer as ResellerOffer;
+use CashbackApi\Whitelabel\Offer as WhitelabelOffer;
 use Giraffe\Giraffe;
 
 /**
@@ -244,6 +246,15 @@ class Type
             return false;
         }
         return static::$allWhitelabels = $this->getWhitelabelApi()->getAll();
+
+    }
+
+    public function getOffers($retailerId = null)
+    {
+        if (!is_numeric($retailerId)) {
+            return false;
+        }
+
 
     }
 
