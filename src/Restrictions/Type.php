@@ -138,6 +138,9 @@ class Type
         return $this->getTypeData()->type ?? false;
     }
 
+    /**
+     * @return string
+     */
     public function getInputsHtml()
     {
         $returnValue = '';
@@ -197,7 +200,7 @@ class Type
                         break;
                 }
                 if (isset($resourceId) && isset($resourceType)) {
-                    return ucwords($resourceType) . ' (' . $resourceId . ') : ' . $this->getResource($resourceType, $resourceId);
+                    return ucwords($resourceType) . ' (' . $resourceId . ') : ' . $this->getResource($resourceType, $resourceId)->getName();
                 }
 
             }
@@ -205,11 +208,15 @@ class Type
         return $returnValue;
     }
 
+    /**
+     * @param $resourceType
+     * @param $resourceId
+     * @return string
+     */
     public function getResource($resourceType, $resourceId)
     {
-        $this->resource = $this->resource ?? new Resource($resourceType, $resourceId, $this->getApi());
+        return $this->resource ?? new Resource($resourceType, $resourceId, $this->getApi());
 
-        return $this->resource->getName();
     }
 
 

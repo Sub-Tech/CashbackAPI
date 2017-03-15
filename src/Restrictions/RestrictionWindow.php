@@ -14,12 +14,27 @@ class RestrictionWindow
         ?>
         <div class="restrictionWindow">
 
-            <h5>Restrictions</h5>
-            <a href="#" class="refreshRestrictions"><i class="fa fa-refresh" aria-hidden="true"></i></a>
-            <div class="restrictionWindowFrame" style="border-radius: 5px;
-    border: solid 1px #ccc;padding:5px;background-color:#f2f2f2;">
+            <h5>Restrictions <a href="#" class="refreshRestrictions"><i class="fa fa-refresh"
+                                                                        aria-hidden="true"></i></a></h5>
+            <?php
+            if ($showEdit) {
+                ?>
 
                 <?php
+            }
+            ?>
+            <div class="restrictionWindowFrame" style="border-radius: 3px;
+    border: solid 1px #ccc;padding:2px;background-color:#f2f2f2;">
+                <?php
+                if ($showEdit) {
+                    ?>
+                    <div class="restrictionControl" style="vertical-align:top;display:inline-block;min-height: 24px;line-height: 24px;
+                            min-width:100%;overflow: hidden;font-size: 12px;background-color:#999;text-indent: 5px;">
+                        <a href="#" style="color:#FFF;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Restriction</a>
+                    </div>
+                    <?php
+                }
+
                 if (Giraffe::canIterate($restrictions)) {
                     $count = count($restrictions);
                     $i = 0;
@@ -27,13 +42,13 @@ class RestrictionWindow
                         $i++;
                         ?>
                         <div class="restrictionWindowRow"
-                             style="vertical-align:top;line-height: 30px; <?= ($i != $count) ? 'border-bottom:solid 1px #8c8c8c;' : '' ?>"
+                             style="vertical-align:top;line-height: 30px; <?= ($i != $count) ? 'border-bottom:solid 1px #FFF;' : '' ?>"
                              title="<?= $restrict->Type->getDescription() ?? 'no description' ?>">
-                            <div style="vertical-align:top;display:inline-block;min-height: 20px;line-height: 20px;
-                    font-size: 14px; min-width:130px;">
+                            <div style="vertical-align:top;display:inline-block;min-height: 34px;line-height: 34px;
+                    font-size: 14px; min-width:130px; font-weight: bold; text-indent: 10px;">
                                 <?= Type::getLabelName($restrict->type) ?>
                             </div>
-                            <div style="vertical-align:top;display:inline-block;min-height: 20px;margin-left:15px;line-height: 20px;
+                            <div style="vertical-align:top;display:inline-block;min-height: 20px;margin-left:15px;line-height: 34px;
                             max-width:200px;overflow: hidden;font-size: 14px;">
                                 <?= $restrict->Type->displayValue(); ?>
                             </div>
