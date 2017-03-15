@@ -3,9 +3,6 @@
 namespace CashbackApi\Restrictions;
 
 use CashbackApi\BaseApi;
-use CashbackApi\Reseller\Whitelabel;
-use CashbackApi\Reseller\Offer as ResellerOffer;
-use CashbackApi\Whitelabel\Offer as WhitelabelOffer;
 use Giraffe\Giraffe;
 
 /**
@@ -27,65 +24,32 @@ class Type
      */
     protected $restriction = null;
     /**
-     * @var array
+     * @var null
      */
-    protected static $allWhitelabels;
-    /**
-     * @var BaseApi
-     */
-    protected $api;
-    /**
-     * @var Whitelabel
-     */
-    protected $whitelabelApi;
-    /**
-     * @var bool
-     */
-    protected $isReseller = false;
-    /**
-     * @var null|array
-     */
-    protected $offer = null;
-    /**
-     * @var null|int
-     */
-    protected $retailerId = null;
-    /**
-     * @var null|int
-     */
-    protected $offerId = null;
+    protected $api = null;
+
     /**
      * @var null|int
      */
     protected $resourceType = null;
+    /**
+     * @var null
+     */
+    protected $resource = null;
 
     /**
      * Type constructor.
+     * @param $resourceType
      * @param $typeData
-     * @param BaseApi|null $api
-     * @param null $restriction
+     * @param $restriction
      */
-    public function __construct($typeData, BaseApi $api = null, $restriction = null, $resourceType = null, $resourceId = null)
+    public function __construct($resourceType, $typeData, $restriction = null, BaseApi $api = null)
     {
-        $this->isReseller = is_a($api, 'CashbackApi\\Reseller\\BaseReseller') ? true : false;
-        $this->setTypeData($typeData);
-        $this->api = $api;
-        $this->setRestriction($restriction);
-        $this->setResourceType($resourceType);
-        if ($resourceType == 'retailer') {
-            $this->setRetailerId($resourceId);
-        }
-        if ($resourceType == 'offer') {
-            $this->setOfferId($resourceId);
-        }
-    }
 
-    /**
-     * @param BaseApi $api
-     */
-    public function setApi(BaseApi $api)
-    {
-        $this->api = $api;
+        $this->setTypeData($typeData);
+        $this->setResourceType($resourceType);
+        $this->setRestriction($restriction);
+        $this->setApi($api);
     }
 
     /**
@@ -109,7 +73,6 @@ class Type
      */
     public function getArguments()
     {
-
 
         $args = $this->getTypeData()->arguments ?? false;
         if (!$args) {
@@ -175,7 +138,7 @@ class Type
         return $this->getTypeData()->type ?? false;
     }
 
-    public function getInputsHtml($delimited = ',')
+    public function getInputsHtml()
     {
         $returnValue = '';
         $args = $this->getArguments();
@@ -210,6 +173,46 @@ class Type
         return $returnValue;
     }
 
+    public function displayValue()
+    {
+        $returnValue = '';
+        $args = $this->getArguments();
+        if (Giraffe::canIterate($args)) {
+
+
+            foreach ($args as $arg) {
+
+                $name = $arg->input_name;
+                $value = $this->getDefinitiveFieldValue($name);
+                switch ($name) {
+                    case 'resource_id':
+                        $resourceId = $value;
+                        break;
+                    case 'resource_type':
+                        $resourceType = $value;
+                        break;
+                    default:
+                        $returnValue .= $value;
+
+                        break;
+                }
+                if (isset($resourceId) && isset($resourceType)) {
+                    return ucwords($resourceType) . ' (' . $resourceId . ') : ' . $this->getResource($resourceType, $resourceId);
+                }
+
+            }
+        }
+        return $returnValue;
+    }
+
+    public function getResource($resourceType, $resourceId)
+    {
+        $this->resource = $this->resource ?? new Resource($resourceType, $resourceId, $this->getApi());
+
+        return $this->resource->getName();
+    }
+
+
     public function getDefinitiveFieldValue($key)
     {
 
@@ -237,78 +240,6 @@ class Type
         return '';
     }
 
-    /**
-     * @return BaseApi | bool
-     */
-    public function getApi()
-    {
-        if (!isset($this->api)) {
-            return false;
-        }
-        return $this->api;
-    }
-
-    /**
-     * @return bool|Whitelabel
-     */
-    public function getWhitelabelApi()
-    {
-
-        if (isset($this->whitelabelApi)) {
-            return $this->whitelabelApi;
-        }
-
-        if ($this->getApi()) {
-            return $this->whitelabelApi = new Whitelabel();
-        }
-        return false;
-    }
-
-    public function getWhitelabels()
-    {
-        if (isset(static::$allWhitelabels)) {
-            return static::$allWhitelabels;
-        }
-        $whitelabelApi = $this->getWhitelabelApi();
-        if (!$whitelabelApi) {
-            return false;
-        }
-        return static::$allWhitelabels = $this->getWhitelabelApi()->getAll();
-
-    }
-
-    /**
-     * @param null $retailerId
-     * @return ResellerOffer|WhitelabelOffer
-     */
-    public function getOffersApi()
-    {
-        $retailerId = $this->getRetailerId();
-        if (!is_numeric($retailerId)) {
-            return false;
-        }
-        if (!isset($this->offer)) {
-            $this->offer = [];
-        }
-        if (isset($this->offer[$retailerId])) {
-            return $this->offer[$retailerId];
-        }
-
-        $this->offer[$retailerId] = ($this->isReseller) ? (new ResellerOffer()) : (new WhitelabelOffer());
-        $this->offer[$retailerId]->setRetailerId($retailerId);
-        return $this->offer[$retailerId];
-
-
-    }
-
-    public function getOffers()
-    {
-        $retailerId = $this->getRetailerId();
-        if (isset($retailerId)) {
-            return $this->getOffersApi()->getAll();
-        }
-        return false;
-    }
 
     /**
      * @return null
@@ -326,21 +257,6 @@ class Type
         $this->restriction = $restriction;
     }
 
-    /**
-     * @return null
-     */
-    public function getRetailerId()
-    {
-        return $this->retailerId;
-    }
-
-    /**
-     * @param null $retailerId
-     */
-    public function setRetailerId($retailerId)
-    {
-        $this->retailerId = $retailerId;
-    }
 
     /**
      * @param null|string $type
@@ -350,21 +266,6 @@ class Type
         $this->type = $type;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getOfferId()
-    {
-        return $this->offerId;
-    }
-
-    /**
-     * @param int|null $offerId
-     */
-    public function setOfferId($offerId)
-    {
-        $this->offerId = $offerId;
-    }
 
     /**
      * @return int|null
@@ -380,6 +281,22 @@ class Type
     public function setResourceType($resourceType)
     {
         $this->resourceType = $resourceType;
+    }
+
+    /**
+     * @return null
+     */
+    public function getApi()
+    {
+        return $this->api;
+    }
+
+    /**
+     * @param null $api
+     */
+    public function setApi($api)
+    {
+        $this->api = $api;
     }
 
 }

@@ -2,8 +2,15 @@
 namespace CashbackApi\Restrictions;
 
 use CashbackApi\BaseApi;
+use CashbackApi\Exception\ApiException;
 use CashbackApi\Reseller\BaseReseller;
 use CashbackApi\Whitelabel\BaseWhitelabel;
+use CashbackApi\Reseller\Retailer as ResellerRetailer;
+use CashbackApi\Whitelabel\Retailer as WhitelabelRetailer;
+use CashbackApi\Reseller\Offer as ResellerOffer;
+use CashbackApi\Whitelabel\Offer as WhitelabelOffer;
+use CashbackApi\Reseller\Whitelabel;
+
 
 /**
  * Class Resource
@@ -18,6 +25,12 @@ class Resource
      * @var null|BaseReseller|BaseWhitelabel
      */
     protected $api = null;
+    /**
+     * @var null
+     */
+    protected $resourceApi = null;
+
+    private $resource;
 
     public function __construct($type, $id, BaseApi $api = null)
     {
@@ -89,5 +102,67 @@ class Resource
     public function setApi($api)
     {
         $this->api = $api;
+    }
+
+    protected function getResourceApi()
+    {
+        if (isset($this->resourceApi)) {
+            return $this->resourceApi;
+        }
+
+        switch ($this->getType()) {
+            case 'retailer':
+                if ($this->isReseller()) {
+                    return $this->resourceApi = new ResellerRetailer();
+                } else {
+                    return $this->resourceApi = new WhitelabelRetailer();
+                }
+                break;
+            case 'offer':
+                if ($this->isReseller()) {
+                    return $this->resourceApi = new ResellerOffer();
+                } else {
+                    return $this->resourceApi = new WhitelabelOffer();
+                }
+                break;
+            case 'whitelabel':
+                if ($this->isReseller()) {
+                    return $this->resourceApi = new Whitelabel();
+                } else {
+                    return $this->resourceApi = false;
+                }
+                break;
+
+            case 'category':
+                if ($this->api !== null) {
+                    return $this->resourceApi = $this->getApi()->getApiCategories();
+                }
+
+                break;
+        }
+    }
+
+    public function getResource()
+    {
+        if (isset($this->resource)) {
+            return $this->resource;
+        }
+        $api = $this->getResourceApi();
+        if ($this->api == null || !$api) {
+            return 'n/a';
+        }
+        try {
+            return $this->resource = $api->get($this->getId());
+        } catch (\Exception $e) {
+            throw new ApiException('Get Method Not Available');
+        }
+
+    }
+
+    public function getName()
+    {
+        $resource = $this->getResource();
+
+        return $resource->name ?? 'n/a';
     }
 }
