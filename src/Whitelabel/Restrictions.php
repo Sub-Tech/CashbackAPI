@@ -2,8 +2,10 @@
 namespace CashbackApi\Whitelabel;
 
 use CashbackApi\Restrictions\AddRestrictionTrait;
+use CashbackApi\Restrictions\UpdateRestrictionTrait;
 use CashbackApi\Restrictions\ListRestrictionTrait;
 use CashbackApi\Restrictions\RemoveRestrictionTrait;
+use CashbackApi\Restrictions\UpdateRestrictionTrait;
 
 /**
  * Class Restrictions
@@ -11,7 +13,7 @@ use CashbackApi\Restrictions\RemoveRestrictionTrait;
  */
 class Restrictions extends BaseWhitelabel
 {
-    
+    use UpdateRestrictionTrait;
     use AddRestrictionTrait;
     use ListRestrictionTrait;
     use RemoveRestrictionTrait;
@@ -20,6 +22,7 @@ class Restrictions extends BaseWhitelabel
     {
         parent::__construct($apiKey, $url, $sessionToken, $timeSessionGenerated);
         $this->addRestrictionPath =
+        $this->updateRestrictionPath =
         $this->listRestrictionPath =
         $this->removeRestrictionPath = 'whitelabel';
     }

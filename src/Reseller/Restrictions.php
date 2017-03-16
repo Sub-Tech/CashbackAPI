@@ -2,6 +2,7 @@
 namespace CashbackApi\Reseller;
 
 use CashbackApi\Restrictions\AddRestrictionTrait;
+use CashbackApi\Restrictions\UpdateRestrictionTrait;
 use CashbackApi\Restrictions\ListRestrictionTrait;
 use CashbackApi\Restrictions\RemoveRestrictionTrait;
 
@@ -11,6 +12,7 @@ use CashbackApi\Restrictions\RemoveRestrictionTrait;
  */
 class Restrictions extends BaseReseller
 {
+    use UpdateRestrictionTrait;
     use AddRestrictionTrait;
     use ListRestrictionTrait;
     use RemoveRestrictionTrait;
@@ -26,6 +28,7 @@ class Restrictions extends BaseReseller
     {
         parent::__construct($apiKey, $url, $sessionToken, $timeSessionGenerated);
         $this->addRestrictionPath =
+        $this->updateRestrictionPath =
         $this->listRestrictionPath =
         $this->removeRestrictionPath = 'reseller';
     }

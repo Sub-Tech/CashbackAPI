@@ -16,21 +16,17 @@ class RestrictionWindow
 
             <h5>Restrictions <a href="#" class="refreshRestrictions"><i class="fa fa-refresh"
                                                                         aria-hidden="true"></i></a></h5>
-            <?php
-            if ($showEdit) {
-                ?>
 
-                <?php
-            }
-            ?>
             <div class="restrictionWindowFrame" style="border-radius: 3px;
-    border: solid 1px #ccc;padding:2px;background-color:#f2f2f2;">
+            border: solid 1px #ccc;padding:2px;background-color:#f2f2f2;">
                 <?php
                 if ($showEdit) {
                     ?>
-                    <div class="restrictionControl" style="vertical-align:top;display:inline-block;min-height: 24px;line-height: 24px;
+                    <div class="restrictionControl" style="border-radius: 2px;vertical-align:top;display:inline-block;min-height: 24px;line-height: 24px;
                             min-width:100%;overflow: hidden;font-size: 12px;background-color:#999;text-indent: 5px;">
-                        <a href="#" style="color:#FFF;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add Restriction</a>
+                        <a href="#" style="color:#FFF;" class="restrictionAdd"><i class="fa fa-plus-circle"
+                                                                                     aria-hidden="true"></i> Add
+                            Restriction</a>
                     </div>
                     <?php
                 }
@@ -66,8 +62,9 @@ class RestrictionWindow
                             if ($showEdit) {
                                 ?>
                                 <div style="vertical-align:top;float:right;min-width:30px;">
-                                    <a href="#" class="restrictionEdit" data-id="<?= $restrict->id ?>"><i
-                                                class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="#" class="restrictionUpdate" data-id="<?= $restrict->id ?>">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    </a>
                                 </div>
                                 <?php
                             }
