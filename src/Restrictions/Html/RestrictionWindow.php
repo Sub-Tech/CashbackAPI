@@ -1,6 +1,7 @@
 <?php
-namespace CashbackApi\Restrictions;
+namespace CashbackApi\Restrictions\Html;
 
+use CashbackApi\Restrictions\Type;
 use Giraffe\Giraffe;
 
 /**
@@ -25,7 +26,7 @@ class RestrictionWindow
                     <div class="restrictionControl" style="border-radius: 2px;vertical-align:top;display:inline-block;min-height: 24px;line-height: 24px;
                             min-width:100%;overflow: hidden;font-size: 12px;background-color:#999;text-indent: 5px;">
                         <a href="#" style="color:#FFF;" class="restrictionAdd"><i class="fa fa-plus-circle"
-                                                                                     aria-hidden="true"></i> Add
+                                                                                  aria-hidden="true"></i> Add
                             Restriction</a>
                     </div>
                     <?php

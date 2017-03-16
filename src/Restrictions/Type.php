@@ -141,9 +141,13 @@ class Type
     /**
      * @return string
      */
-    public function getInputsHtml()
+    public function getInputsHtml($hidden = false)
     {
+
         $returnValue = '';
+        if ($hidden) {
+            $returnValue .= '<div style="display: none;">';
+        }
         $args = $this->getArguments();
         if (Giraffe::canIterate($args)) {
             static::$uniqueId = static::$uniqueId ?? 1;
@@ -172,6 +176,9 @@ class Type
                 $returnValue .= '</div>';
 
             }
+        }
+        if ($hidden) {
+            $returnValue .= '</div>';
         }
         return $returnValue;
     }

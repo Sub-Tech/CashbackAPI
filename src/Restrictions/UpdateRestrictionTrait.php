@@ -48,7 +48,7 @@ trait UpdateRestrictionTrait
     {
         $restriction = new \stdClass();
         $restriction->restriction_type = 'minimum_age';
-        $restriction->minimum = $age;
+        $restriction->minimum_age = $age;
         return $this->updateRestriction($restrictionId, $resourceType, $resourceId, $restriction);
     }
 
