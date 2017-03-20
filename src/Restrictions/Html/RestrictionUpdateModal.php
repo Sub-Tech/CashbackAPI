@@ -69,8 +69,8 @@ class RestrictionUpdateModal
                             }
                             ?>
                         </select>
-                        <input style="display:none;" type="text" name="search" id="search-resources"/>
-                        <input style="display:none;" type="text" name="search_offer" id="search-offers"/>
+                        <input style="display:none;" type="text" name="search" id="search-resources" placeholder="Search"/>
+                        <input style="display:none;" type="text" name="search_offer" id="search-offers" placeholder="Search Offer" />
                         <input type="hidden" name="retailer_id" id="retailer_id-search"/>
                         <div id="search-resources-results-1"></div>
                         <div id="search-resources-results-2"></div>
