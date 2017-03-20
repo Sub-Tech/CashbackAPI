@@ -33,4 +33,32 @@ class Whitelabel extends BaseReseller
         $data->white_label_id = $whiteLabelId;
         return $this->doRequest('reseller/whitelabel/get', $data);
     }
+
+    /**
+     * @param $search
+     * @param $orderBy
+     * @param $page
+     * @param int $records
+     * @return bool|object
+     */
+    public function getPaginated($search, $orderBy, $page, $records = 20)
+    {
+        $data = new \stdClass();
+        $data->search = $search;
+        $data->order_by = $orderBy;
+        $data->page = $page;
+        $data->per_page = $records;
+        return $this->doRequest('reseller/whitelabel/get-paginated', $data);
+    }
+
+    /**
+     * @param $search
+     * @return bool|object
+     */
+    public function getTotalRecords($search)
+    {
+        $data = new \stdClass();
+        $data->search = $search;
+        return $this->doRequest('reseller/whitelabel/get-total', $data);
+    }
 }
