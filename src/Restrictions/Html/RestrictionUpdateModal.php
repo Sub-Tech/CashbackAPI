@@ -27,6 +27,20 @@ class RestrictionUpdateModal
         $typesList = $api->getApiRestrictions()->getRestrictionTypesForList(true);
 
         ?>
+        <style>
+            .search-result {
+                padding: 3px;
+                border-bottom: solid 1px #cccc;
+                border-radius: 2px;
+            }
+
+            .search-result.active {
+                background: #1b3047;
+                color: #fff;
+                padding: 3px;
+            }
+
+        </style>
         <select class="restrictSelect">
             <option>Choose</option>
             <?php
@@ -69,8 +83,10 @@ class RestrictionUpdateModal
                             }
                             ?>
                         </select>
-                        <input style="display:none;" type="text" name="search" id="search-resources" placeholder="Search"/>
-                        <input style="display:none;" type="text" name="search_offer" id="search-offers" placeholder="Search Offer" />
+                        <input style="display:none;" type="text" name="search" id="search-resources"
+                               placeholder="Search"/>
+                        <input style="display:none;" type="text" name="search_offer" id="search-offers"
+                               placeholder="Search Offer"/>
                         <input type="hidden" name="retailer_id" id="retailer_id-search"/>
                         <div id="search-resources-results-1"></div>
                         <div id="search-resources-results-2"></div>
