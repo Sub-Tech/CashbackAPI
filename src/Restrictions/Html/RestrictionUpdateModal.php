@@ -3,17 +3,19 @@ namespace CashbackApi\Restrictions\Html;
 
 use CashbackApi\BaseApi;
 use CashbackApi\Restrictions\Type;
+use Giraffe\Giraffe;
 
 /**
  * Class RestrictionUpdateModal
  * @package CashbackApi\Restrictions\Html
  */
-class RestrictionUpdateModal
+class RestrictionUpdateModal extends BaseHtml
 {
     /**
      * @var null
      */
     protected $api = null;
+
 
     public function __construct(BaseApi $api = null, $currentResourceType = 'whitelabel', $currentResourceId = 0)
     {
@@ -25,7 +27,7 @@ class RestrictionUpdateModal
             return;
         }
         $typesList = $api->getApiRestrictions()->getRestrictionTypesForList(true);
-
+        ob_start();
         ?>
         <style>
             .search-result {
@@ -85,10 +87,10 @@ class RestrictionUpdateModal
                         </select>
                         <input style="display:none;" type="text" name="search" id="search-resources"
                                placeholder="Search"/>
-                        <input style="display:none;" type="text" name="search_offer" id="search-offers"
-                               placeholder="Search Offer"/>
                         <input type="hidden" name="retailer_id" id="retailer_id-search"/>
                         <div id="search-resources-results-1"></div>
+                        <input style="display:none;" type="text" name="search_offer" id="search-offers"
+                               placeholder="Search Offer"/>
                         <div id="search-resources-results-2"></div>
                         <?php
                     }
@@ -105,7 +107,7 @@ class RestrictionUpdateModal
             <?php
 
         }
-
+        $this->output = ob_get_clean();
     }
 
     /**
@@ -123,5 +125,45 @@ class RestrictionUpdateModal
     {
         $this->api = $api;
     }
+
+    public function searchResultsHtml($resultData, $retailerId = null)
+    {
+        $retailerId = $retailerId ?? 0;
+        if (!Giraffe::canIterate($resultData)) {
+            return 'no results';
+        }
+        $returnValue = '';
+        foreach ($resultData as $data) {
+            $id = 0;
+            $ret = '';
+            $type = '';
+            if (isset($data->whitelabel_id)) {
+                $id = $data->whitelabel_id;
+                $type = 'whitelabel';
+            }
+            if (isset($data->category_id)) {
+                $id = $data->category_id;
+                $type = 'category';
+            }
+            if (isset($data->retailer_id)) {
+                $id = $data->retailer_id;
+                $ret = ' data-retailer_id="' . $data->retailer_id . '" ';
+                $type = 'retailer';
+            }
+            if (isset($data->offer_id)) {
+                $id = $data->offer_id;
+                $ret = ' data-retailer_id="' . $retailerId . '" ';
+                $type = 'offer';
+            }
+            $name = $data->name;
+            $returnValue .= '<div class="search-result" data-type="' . $type .
+                '" data-id="' . $id .
+                '" ' . $ret . ' >' .
+                "{$name}" . '</div>';
+        }
+
+        return $returnValue;
+    }
+
 
 }

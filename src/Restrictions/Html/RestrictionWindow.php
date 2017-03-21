@@ -8,10 +8,11 @@ use Giraffe\Giraffe;
  * Class RestrictionWindow
  * @package CashbackApi\Restrictions
  */
-class RestrictionWindow
+class RestrictionWindow extends BaseHtml
 {
     public function __construct($restrictions, $showTrash = true, $showEdit = true)
     {
+        ob_start();
         ?>
         <div class="restrictionWindow">
 
@@ -84,5 +85,7 @@ class RestrictionWindow
 
         </div>
         <?php
+
+        $this->output = ob_get_clean();
     }
 }

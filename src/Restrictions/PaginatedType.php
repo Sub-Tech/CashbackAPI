@@ -13,14 +13,14 @@ use CashbackApi\Reseller\Whitelabel;
 
 
 /**
- * Class Resource
+ * Class PaginatedType
  * @package CashbackApi\Restrictions
  */
-class Resource
+class PaginatedType
 {
     protected $type = null;
-    protected $id = null;
     protected $reseller = false;
+    protected $retailerId = null;
     /**
      * @var null|BaseReseller|BaseWhitelabel
      */
@@ -30,14 +30,13 @@ class Resource
      */
     protected $resourceApi = null;
 
-    private $resource;
 
-    public function __construct($type, $id, BaseApi $api = null)
+    public function __construct($type, BaseApi $api = null, $retailerId = null)
     {
         $this->setApi($api);
-        $this->setId($id);
         $this->setType($type);
         $this->setReseller((is_a($api, 'CashbackApi\\Reseller\\BaseReseller') ? true : false));
+        $this->setRetailerId($retailerId);
     }
 
     /**
@@ -56,21 +55,6 @@ class Resource
         $this->type = $type;
     }
 
-    /**
-     * @return null
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param null $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
 
     /**
      * @return bool
@@ -120,10 +104,16 @@ class Resource
                 break;
             case 'offer':
                 if ($this->isReseller()) {
-                    return $this->resourceApi = new ResellerOffer();
+                    $offer = $this->resourceApi = new ResellerOffer();
                 } else {
-                    return $this->resourceApi = new WhitelabelOffer();
+                    $offer = $this->resourceApi = new WhitelabelOffer();
                 }
+
+                if (isset($this->retailerId)) {
+                    $offer->setRetailerId($this->getRetailerId());
+                }
+
+                return $offer;
                 break;
             case 'whitelabel':
                 if ($this->isReseller()) {
@@ -142,28 +132,42 @@ class Resource
         }
     }
 
-    public function getResource()
-    {
-        if (isset($this->resource)) {
-            return $this->resource;
-        }
-        $api = $this->getResourceApi();
-        if ($this->api == null || !$api) {
-            return 'n/a';
-        }
-        try {
-            return $this->resource = $api->get($this->getId());
-        } catch (\Exception $e) {
-            throw new ApiException('Get Method Not Available');
-        }
 
+    /**
+     * @return null
+     */
+    public function getRetailerId()
+    {
+        return $this->retailerId;
     }
 
-    public function getName()
+    /**
+     * @param null $retailerId
+     */
+    public function setRetailerId($retailerId)
     {
-        $resource = $this->getResource();
+        $this->retailerId = $retailerId;
+    }
 
-        return $resource->name ?? 'n/a';
+    public function get($search, $orderBy, $page, $records = 20)
+    {
+        $resultData = false;
+        switch ($this->getType()) {
+            case 'retailer':
+                $resultData = $this->getResourceApi()->getPaginated(null, $search, $orderBy, $page, $records);
+                break;
+            case 'category':
+                $resultData = $this->getResourceApi()->getPaginated($search, $orderBy, $page, $records);
+                break;
+            case 'offer':
+                $resultData = $this->getResourceApi()->getPaginated(null, $search, $orderBy, $page, $records);
+                break;
+            case 'whitelabel':
+                $resultData = $this->getResourceApi()->getPaginated($search, $orderBy, $page, $records);
+                break;
+        }
+
+        return $resultData;
     }
 
 }
