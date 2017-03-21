@@ -3,6 +3,7 @@
 namespace CashbackApi\Restrictions;
 
 use CashbackApi\BaseApi;
+use CashbackApi\Resources\Resource;
 use Giraffe\Giraffe;
 
 /**

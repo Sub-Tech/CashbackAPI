@@ -4,6 +4,7 @@ namespace CashbackApi\Restrictions;
 
 use CashbackApi\Reseller\BaseReseller;
 use CashbackApi\Whitelabel\BaseWhitelabel;
+use CashbackApi\Resources\Resource;
 
 /**
  * Class HierarchyApply

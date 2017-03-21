@@ -1,8 +1,7 @@
 <?php
-namespace CashbackApi\Restrictions;
+namespace CashbackApi\Resources;
 
 use CashbackApi\BaseApi;
-use CashbackApi\Exception\ApiException;
 use CashbackApi\Reseller\BaseReseller;
 use CashbackApi\Whitelabel\BaseWhitelabel;
 use CashbackApi\Reseller\Retailer as ResellerRetailer;
@@ -12,14 +11,11 @@ use CashbackApi\Whitelabel\Offer as WhitelabelOffer;
 use CashbackApi\Reseller\Whitelabel;
 
 
-/**
- * Class Resource
- * @package CashbackApi\Restrictions
- */
-class Resource
+abstract class BaseResource
 {
-    protected $type = null;
-    protected $id = null;
+    /**
+     * @var bool
+     */
     protected $reseller = false;
     /**
      * @var null|BaseReseller|BaseWhitelabel
@@ -29,16 +25,34 @@ class Resource
      * @var null
      */
     protected $resourceApi = null;
+    /**
+     * @var null|int
+     */
+    protected $retailerId = null;
 
-    private $resource;
-
-    public function __construct($type, $id, BaseApi $api = null)
+    public function __construct($type, BaseApi $api = null)
     {
         $this->setApi($api);
-        $this->setId($id);
         $this->setType($type);
-        $this->setReseller((is_a($api, 'CashbackApi\\Reseller\\BaseReseller') ? true : false));
+
     }
+
+    /**
+     * @param int|null $retailerId
+     */
+    public function setRetailerId($retailerId)
+    {
+        $this->retailerId = $retailerId;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getRetailerId()
+    {
+        return $this->retailerId;
+    }
+
 
     /**
      * @return null
@@ -56,21 +70,6 @@ class Resource
         $this->type = $type;
     }
 
-    /**
-     * @return null
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param null $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
 
     /**
      * @return bool
@@ -99,8 +98,9 @@ class Resource
     /**
      * @param BaseReseller|BaseWhitelabel|null $api
      */
-    public function setApi($api)
+    public function setApi(BaseApi $api)
     {
+        $this->setReseller((is_a($api, 'CashbackApi\\Reseller\\BaseReseller') ? true : false));
         $this->api = $api;
     }
 
@@ -120,10 +120,16 @@ class Resource
                 break;
             case 'offer':
                 if ($this->isReseller()) {
-                    return $this->resourceApi = new ResellerOffer();
+                    $offer = $this->resourceApi = new ResellerOffer();
                 } else {
-                    return $this->resourceApi = new WhitelabelOffer();
+                    $offer = $this->resourceApi = new WhitelabelOffer();
                 }
+
+                if (isset($this->retailerId)) {
+                    $offer->setRetailerId($this->getRetailerId());
+                }
+
+                return $offer;
                 break;
             case 'whitelabel':
                 if ($this->isReseller()) {
@@ -142,28 +148,5 @@ class Resource
         }
     }
 
-    public function getResource()
-    {
-        if (isset($this->resource)) {
-            return $this->resource;
-        }
-        $api = $this->getResourceApi();
-        if ($this->api == null || !$api) {
-            return 'n/a';
-        }
-        try {
-            return $this->resource = $api->get($this->getId());
-        } catch (\Exception $e) {
-            throw new ApiException('Get Method Not Available');
-        }
-
-    }
-
-    public function getName()
-    {
-        $resource = $this->getResource();
-
-        return $resource->name ?? 'n/a';
-    }
 
 }
