@@ -70,6 +70,7 @@ class RestrictionWindow extends BaseHtml
                                 </div>
                                 <?php
                             }
+
                             ?>
 
                         </div>

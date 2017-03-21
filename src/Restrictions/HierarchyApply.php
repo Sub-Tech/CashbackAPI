@@ -26,6 +26,8 @@ class HierarchyApply
      */
     public $peckingOrder = ['whitelabel' => 4, 'category' => 3, 'retailer' => 2, 'offer' => 1];
 
+    protected $result = false;
+
     /**
      * @param Resource $resourceOne
      * @param Resource $resourceTwo
@@ -51,7 +53,7 @@ class HierarchyApply
         $restriction->restriction_type = $restrictionType;
         $restriction->resource_type = $this->getRestriction()->getType();
         $restriction->resource_id = $this->getRestriction()->getId();
-        return call_user_func_array(
+        $this->result = call_user_func_array(
             array($this->restrictionApi, $restrictMethod),
             array($this->getRestrictionAgainst()->getId(), $restriction)
         );
@@ -88,6 +90,14 @@ class HierarchyApply
     public function setRestriction($restriction)
     {
         $this->restriction = $restriction;
+    }
+
+    /**
+     * @return bool|mixed
+     */
+    public function getResult()
+    {
+        return $this->result;
     }
 
 

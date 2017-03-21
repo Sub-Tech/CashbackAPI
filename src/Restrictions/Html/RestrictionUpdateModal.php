@@ -16,6 +16,7 @@ class RestrictionUpdateModal extends BaseHtml
      */
     protected $api = null;
 
+    public static $typesList = false;
 
     public function __construct(BaseApi $api = null, $currentResourceType = 'whitelabel', $currentResourceId = 0)
     {
@@ -26,7 +27,7 @@ class RestrictionUpdateModal extends BaseHtml
         if ($api == null) {
             return;
         }
-        $typesList = $api->getApiRestrictions()->getRestrictionTypesForList(true);
+        static::$typesList = $typesList = $api->getApiRestrictions()->getRestrictionTypesForList(true);
         ob_start();
         ?>
         <style>
@@ -67,6 +68,7 @@ class RestrictionUpdateModal extends BaseHtml
             <div id="<?= $type->type ?>-add-outer" class="add-type-form"
                  style="display:none;">
                 <form id="<?= $type->type ?>-add-form">
+                    <input type="hidden" name="restriction_type" value="<?= $type->type ?>"/>
                     <?php
                     if ($resource_blacklist) {
                         echo '<h5>' . $type->Type->getTitle() . '</h5>';
@@ -159,11 +161,21 @@ class RestrictionUpdateModal extends BaseHtml
             $returnValue .= '<div class="search-result" data-type="' . $type .
                 '" data-id="' . $id .
                 '" ' . $ret . ' >' .
-                "{$name}" . '</div>';
+                "<i class=\"fa fa-plus-square-o\" aria-hidden=\"true\"></i> {$name}" . '</div>';
         }
 
         return $returnValue;
     }
 
+    public static function getTypesListArray()
+    {
+        $returnValue = [];
+        if (static::$typesList) {
+            foreach (static::$typesList as $type) {
+                $returnValue[] = $type->type;
+            }
+        }
+        return $returnValue;
+    }
 
 }

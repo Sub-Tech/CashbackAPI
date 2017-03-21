@@ -40,7 +40,7 @@ trait AddRestrictionTrait
      * @param $data
      * @param object $restriction
      */
-    protected function setAddRestriction(&$data, object $restriction)
+    protected function setAddRestriction(&$data, \stdClass $restriction)
     {
         foreach ($restriction as $key => $val) {
             $data->{$key} = $val;
@@ -52,10 +52,10 @@ trait AddRestrictionTrait
      * @param null $restriction
      * @return mixed
      */
-    protected function addRestrictionToRetailer($retailerId = null, $restriction = null)
+    public function addRestrictionToRetailer($retailerId = null, $restriction = null)
     {
         $data = new \stdClass();
-        $data->retailer_id = $retailerId;
+        $data->retailer_id = (int)$retailerId;
         $this->setAddRestriction($data, $restriction);
         return $this->doRequest($this->addRestrictionPath . '/restrictions/retailer/add', $data);
     }
@@ -65,10 +65,10 @@ trait AddRestrictionTrait
      * @param null $restriction
      * @return mixed
      */
-    protected function addRestrictionToOffer($offerId = null, $restriction = null)
+    public function addRestrictionToOffer($offerId = null, $restriction = null)
     {
         $data = new \stdClass();
-        $data->offer_id = $offerId;
+        $data->offer_id = (int)$offerId;
         $this->setAddRestriction($data, $restriction);
         return $this->doRequest($this->addRestrictionPath . '/restrictions/offer/add', $data);
     }
@@ -78,10 +78,10 @@ trait AddRestrictionTrait
      * @param null $restriction
      * @return mixed
      */
-    protected function addRestrictionToCategory($categoryId = null, $restriction = null)
+    public function addRestrictionToCategory($categoryId = null, $restriction = null)
     {
         $data = new \stdClass();
-        $data->category_id = $categoryId;
+        $data->category_id = (int)$categoryId;
         $this->setAddRestriction($data, $restriction);
         return $this->doRequest($this->addRestrictionPath . '/restrictions/category/add', $data);
     }
@@ -91,10 +91,10 @@ trait AddRestrictionTrait
      * @param null $restriction
      * @return mixed
      */
-    protected function addRestrictionToWhitelabel($whitelabelId = null, $restriction = null)
+    public function addRestrictionToWhitelabel($whitelabelId = null, $restriction = null)
     {
         $data = new \stdClass();
-        $data->whitelabel_id = $whitelabelId;
+        $data->whitelabel_id = (int)$whitelabelId;
         $this->setAddRestriction($data, $restriction);
 
         return $this->doRequest($this->addRestrictionPath . '/restrictions/whitelabel/add', $data);
@@ -106,7 +106,7 @@ trait AddRestrictionTrait
      * @param object $restriction
      * @return mixed
      */
-    protected function mapToType($toType, $id, object $restriction)
+    protected function mapToType($toType, $id, \stdClass $restriction)
     {
         $allowed = ['retailer', 'offer', 'category', 'whitelabel'];
         if (!in_array($toType, $allowed)) {
@@ -134,11 +134,11 @@ trait AddRestrictionTrait
      * @param int $age
      * @return mixed
      */
-    public function addMinAgeRestriction($toType, $id, $age = 18)
+    public function addMinimumAgeRestriction($toType, $id, $age = 18)
     {
         $restriction = new \stdClass();
         $restriction->restriction_type = 'minimum_age';
-        $restriction->minimum_age = $age;
+        $restriction->minimum_age = (int)$age;
         return $this->mapToType($toType, $id, $restriction);
 
     }
@@ -150,11 +150,11 @@ trait AddRestrictionTrait
      * @param int $age
      * @return mixed
      */
-    public function addMaxAgeRestriction($toType, $id, $age = 65)
+    public function addMaximumAgeRestriction($toType, $id, $age = 65)
     {
         $restriction = new \stdClass();
         $restriction->restriction_type = 'maximum_age';
-        $restriction->maximum_age = $age;
+        $restriction->maximum_age = (int)$age;
         return $this->mapToType($toType, $id, $restriction);
 
     }
@@ -165,7 +165,7 @@ trait AddRestrictionTrait
      * @param array|string $ips
      * @return mixed
      */
-    public function addIPRestriction($toType, $id, $ips)
+    public function addIpBlacklistRestriction($toType, $id, $ips)
     {
         $restriction = new \stdClass();
         $restriction->restriction_type = 'ip_blacklist';
@@ -187,7 +187,7 @@ trait AddRestrictionTrait
     {
         $restriction = new \stdClass();
         $restriction->restriction_type = 'resource_blacklist';
-        $restriction->resource_id = $resourceId;
+        $restriction->resource_id = (int)$resourceId;
         $restriction->resource_type = $resourceType;
         return $restriction;
     }

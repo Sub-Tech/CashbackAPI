@@ -5,7 +5,6 @@ use CashbackApi\BaseApi;
 use CashbackApi\Exception\ApiException;
 
 
-
 /**
  * Class Resource
  * @package CashbackApi\Restrictions
@@ -34,7 +33,7 @@ class Resource extends BaseResource
      */
     public function getId()
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**

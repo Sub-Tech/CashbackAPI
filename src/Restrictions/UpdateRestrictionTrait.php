@@ -44,7 +44,7 @@ trait UpdateRestrictionTrait
         return $this->doRequest($this->updateRestrictionPath . '/restrictions/update', $data);
     }
 
-    public function updateMinAge($restrictionId, $resourceType, $resourceId, $age)
+    public function updateMinimumAge($restrictionId, $resourceType, $resourceId, $age)
     {
         $restriction = new \stdClass();
         $restriction->restriction_type = 'minimum_age';
@@ -52,7 +52,7 @@ trait UpdateRestrictionTrait
         return $this->updateRestriction($restrictionId, $resourceType, $resourceId, $restriction);
     }
 
-    public function updateMaxAge($restrictionId, $resourceType, $resourceId, $age)
+    public function updateMaximumAge($restrictionId, $resourceType, $resourceId, $age)
     {
         $restriction = new \stdClass();
         $restriction->restriction_type = 'maximum_age';
@@ -60,7 +60,7 @@ trait UpdateRestrictionTrait
         return $this->updateRestriction($restrictionId, $resourceType, $resourceId, $restriction);
     }
 
-    public function updateIPRestriction($restrictionId, $resourceType, $resourceId, $ips)
+    public function updateIpBlacklistRestriction($restrictionId, $resourceType, $resourceId, $ips)
     {
         $restriction = new \stdClass();
         $restriction->restriction_type = 'ip_blacklist';
