@@ -64,7 +64,9 @@ class RestrictionWindow extends BaseHtml
                             if ($showTrash) {
                                 ?>
                                 <div style="vertical-align:top;float:right;min-width:30px;">
-                                    <a href="#" class="restrictionRemove" data-id="<?= $restrict->id ?>"><i
+                                    <a href="#" class="restrictionRemove" data-id="<?= $restrict->id ?>"
+                                       data-resource_type="<?= $restrict->Type->getOwnedByResourceType() ?>"
+                                       data-resource_id="<?= $restrict->Type->getOwnedByResourceId() ?>"><i
                                                 class="fa fa-trash" aria-hidden="true"></i></a>
                                 </div>
                                 <?php
