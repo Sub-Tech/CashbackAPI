@@ -239,7 +239,7 @@ class Type
                     if (isset($currentResourceId) && isset($currentResourceType)) {
                         $id = $this->getOwnedByResourceId();
                         $type = $this->getOwnedByResourceType();
-                        if (($id && $type) && ($id != $currentResourceId) && ($type != $currentResourceType)) {
+                        if (($id && $type) && ($id != $currentResourceId || $type != $currentResourceType)) {
                             $resourceType = $type;
                             $resourceId = $id;
                         }

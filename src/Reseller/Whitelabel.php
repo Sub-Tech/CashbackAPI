@@ -30,7 +30,7 @@ class Whitelabel extends BaseReseller
     {
 
         $data = new \stdClass();
-        $data->white_label_id = $whiteLabelId;
+        $data->whitelabel_id = (int)$whiteLabelId;
         return $this->doRequest('reseller/whitelabel/get', $data);
     }
 
