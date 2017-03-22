@@ -9,25 +9,20 @@ use Giraffe\Giraffe;
  * Class RestrictionUpdateModal
  * @package CashbackApi\Restrictions\Html
  */
-class RestrictionUpdateModal extends BaseHtml
+class RestrictionAddModal extends BaseHtml
 {
     /**
      * @var null
      */
     protected $api = null;
-
-    public static $typesList = false;
-
+    
     public function __construct(BaseApi $api = null, $currentResourceType = 'whitelabel', $currentResourceId = 0)
     {
-        if (isset($api)) {
-            $this->setApi($api);
-        }
-        $api = $this->getApi();
-        if ($api == null) {
+        parent::__construct($api);
+        if (!isset($this->api)) {
             return;
         }
-        static::$typesList = $typesList = $api->getApiRestrictions()->getRestrictionTypesForList(true);
+
         ob_start();
         ?>
         <style>
@@ -47,16 +42,19 @@ class RestrictionUpdateModal extends BaseHtml
         <select class="restrictSelect">
             <option>Choose</option>
             <?php
-            foreach ($typesList as $type) {
+            $typesList = $this->getTypesList();
+            if ($typesList) {
+                foreach ($typesList as $type) {
 
-                ?>
-                <option value="<?= $type->type ?>"
-                        data-description="<?= addslashes($type->description) ?>"
-                        data-show="<?= addslashes($type->type) ?>-add-outer"
-                >
-                    <?= Type::getLabelName($type->type) ?>
-                </option>
-                <?php
+                    ?>
+                    <option value="<?= $type->type ?>"
+                            data-description="<?= addslashes($type->description) ?>"
+                            data-show="<?= addslashes($type->type) ?>-add-outer"
+                    >
+                        <?= Type::getLabelName($type->type) ?>
+                    </option>
+                    <?php
+                }
             }
             ?>
         </select>
@@ -112,21 +110,6 @@ class RestrictionUpdateModal extends BaseHtml
         $this->output = ob_get_clean();
     }
 
-    /**
-     * @return null
-     */
-    public function getApi()
-    {
-        return $this->api;
-    }
-
-    /**
-     * @param null $api
-     */
-    public function setApi(BaseApi $api)
-    {
-        $this->api = $api;
-    }
 
     public function searchResultsHtml($resultData, $retailerId = null)
     {
@@ -167,15 +150,5 @@ class RestrictionUpdateModal extends BaseHtml
         return $returnValue;
     }
 
-    public static function getTypesListArray()
-    {
-        $returnValue = [];
-        if (static::$typesList) {
-            foreach (static::$typesList as $type) {
-                $returnValue[] = $type->type;
-            }
-        }
-        return $returnValue;
-    }
 
 }
