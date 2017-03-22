@@ -1,24 +1,32 @@
 <?php
 namespace CashbackApi\Restrictions\Html;
 
+use CashbackApi\BaseApi;
 use CashbackApi\Restrictions\Type;
 use Giraffe\Giraffe;
 
 /**
  * Class RestrictionWindow
- * @package CashbackApi\Restrictions
+ * @package CashbackApi\Restrictions\Html
  */
 class RestrictionWindow extends BaseHtml
 {
-    public function __construct($restrictions, $showTrash = true, $showEdit = true)
+    public function __construct($restrictions,
+                                $currentResourceType = 'whitelabel',
+                                $currentResourceId = 0,
+                                $showTrash = true,
+                                $showEdit = true,
+                                BaseApi $api = null
+    )
     {
+        parent::__construct($api);
+
         ob_start();
         ?>
         <div class="restrictionWindow">
 
             <h5>Restrictions <a href="#" class="refreshRestrictions"><i class="fa fa-refresh"
                                                                         aria-hidden="true"></i></a></h5>
-
             <div class="restrictionWindowFrame" style="border-radius: 3px;
             border: solid 1px #ccc;padding:2px;background-color:#f2f2f2;">
                 <?php
@@ -38,6 +46,8 @@ class RestrictionWindow extends BaseHtml
                     $i = 0;
                     foreach ($restrictions as $restrict) {
                         $i++;
+                        $restrict->Type = new Type($restrict, $this->getApi());
+
                         ?>
                         <div class="restrictionWindowRow"
                              style="vertical-align:top;line-height: 30px; <?= ($i != $count) ? 'border-bottom:solid 1px #FFF;' : '' ?>"
@@ -48,7 +58,7 @@ class RestrictionWindow extends BaseHtml
                             </div>
                             <div style="vertical-align:top;display:inline-block;min-height: 20px;margin-left:15px;line-height: 34px;
                             max-width:200px;overflow: hidden;font-size: 14px;">
-                                <?= $restrict->Type->displayValue(); ?>
+                                <?= $restrict->Type->displayValue($currentResourceType, $currentResourceId); ?>
                             </div>
                             <?php
                             if ($showTrash) {

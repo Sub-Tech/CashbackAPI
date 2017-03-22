@@ -3,7 +3,9 @@
 namespace CashbackApi\Restrictions;
 
 use CashbackApi\BaseApi;
+use CashbackApi\Reseller\BaseReseller;
 use CashbackApi\Resources\Resource;
+use CashbackApi\Whitelabel\BaseWhitelabel;
 use Giraffe\Giraffe;
 
 /**
@@ -40,17 +42,21 @@ class Type
 
     /**
      * Type constructor.
-     * @param $resourceType
-     * @param $typeData
-     * @param $restriction
+     * @param null $restriction
+     * @param BaseApi|null $api
      */
-    public function __construct($resourceType, $typeData, $restriction = null, BaseApi $api = null)
+    public function __construct($restriction = null, BaseApi $api = null)
     {
 
-        $this->setTypeData($typeData);
-        $this->setResourceType($resourceType);
+        if (is_string($restriction)) {
+            $restrictionObject = new \stdClass();
+            $restrictionObject->type = $restriction;
+            $restriction = $restrictionObject;
+        }
         $this->setRestriction($restriction);
         $this->setApi($api);
+
+
     }
 
     /**
@@ -58,6 +64,23 @@ class Type
      */
     public function getTypeData()
     {
+        if ($this->typeData) {
+            return $this->typeData;
+        }
+
+        $restriction = $this->getRestriction() ?? false;
+        if ($restriction && isset($restriction->type) && isset($this->api)) {
+
+            $types = $this->getApi()->getApiRestrictions()->getRestrictionTypes(true);
+            if ($types) {
+                foreach ($types as $type) {
+                    if ($type->type == $restriction->type) {
+                        return $this->typeData = $type;
+                    }
+                }
+            }
+        }
+
         return $this->typeData;
     }
 
@@ -184,7 +207,12 @@ class Type
         return $returnValue;
     }
 
-    public function displayValue()
+    /**
+     * @param null $currentResourceType
+     * @param null $currentResourceId
+     * @return string
+     */
+    public function displayValue($currentResourceType = null, $currentResourceId = null)
     {
         $returnValue = '';
         $args = $this->getArguments();
@@ -208,6 +236,14 @@ class Type
                         break;
                 }
                 if (isset($resourceId) && isset($resourceType)) {
+                    if (isset($currentResourceId) && isset($currentResourceType)) {
+                        $id = $this->getOwnedByResourceId();
+                        $type = $this->getOwnedByResourceType();
+                        if (($id && $type) && ($id != $currentResourceId) && ($type != $currentResourceType)) {
+                            $resourceType = $type;
+                            $resourceId = $id;
+                        }
+                    }
                     return ucwords($resourceType) . ' (' . $resourceId . ') : ' . $this->getResource($resourceType, $resourceId)->getName();
                 }
 
@@ -283,23 +319,7 @@ class Type
 
 
     /**
-     * @return int|null
-     */
-    public function getResourceType()
-    {
-        return $this->resourceType;
-    }
-
-    /**
-     * @param int|null $resourceType
-     */
-    public function setResourceType($resourceType)
-    {
-        $this->resourceType = $resourceType;
-    }
-
-    /**
-     * @return null
+     * @return null | BaseApi | BaseWhitelabel | BaseReseller
      */
     public function getApi()
     {
@@ -309,9 +329,19 @@ class Type
     /**
      * @param null $api
      */
-    public function setApi($api)
+    public function setApi(BaseApi $api = null)
     {
         $this->api = $api;
+    }
+
+    public function getOwnedByResourceId()
+    {
+        return $this->getRestriction()->owned_by_resource_id ?? false;
+    }
+
+    public function getOwnedByResourceType()
+    {
+        return $this->getRestriction()->owned_by_resource_type ?? false;
     }
 
 }

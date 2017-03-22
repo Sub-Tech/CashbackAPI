@@ -40,8 +40,11 @@ abstract class BaseHtml
 
     }
 
-    public function html()
+    public function html($return = false)
     {
+        if ($return) {
+            return $this->output;
+        }
         echo $this->output;
     }
 

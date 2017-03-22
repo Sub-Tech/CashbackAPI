@@ -15,7 +15,7 @@ class RestrictionAddModal extends BaseHtml
      * @var null
      */
     protected $api = null;
-    
+
     public function __construct(BaseApi $api = null, $currentResourceType = 'whitelabel', $currentResourceId = 0)
     {
         parent::__construct($api);
@@ -60,7 +60,7 @@ class RestrictionAddModal extends BaseHtml
         </select>
         <?php
         foreach ($typesList as $type) {
-            $type->Type = new Type($currentResourceType, $type, null, $api);
+            $type->Type = new Type($type, $api);
             $resource_blacklist = ($type->type == 'resource_blacklist') ? true : false;
             ?>
             <div id="<?= $type->type ?>-add-outer" class="add-type-form"

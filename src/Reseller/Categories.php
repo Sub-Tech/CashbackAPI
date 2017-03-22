@@ -129,11 +129,21 @@ class Categories extends BaseReseller
      * @param $search
      * @return bool|object
      */
-    public function getTotalRecords( $search)
+    public function getTotalRecords($search)
     {
         $data = new \stdClass();
         $data->search = $search;
         return $this->doRequest('reseller/category/get-total', $data);
     }
 
+    /**
+     * @param $id
+     * @return bool|object
+     */
+    public function get($id)
+    {
+        $data = new \stdClass();
+        $data->category_id = $id;
+        return $this->doRequest('reseller/category/get', $data);
+    }
 }

@@ -86,4 +86,15 @@ class Categories extends BaseWhitelabel
         return $this->doRequest('whitelabel/category/get-total', $data);
     }
 
+    /**
+     * @param $id
+     * @return bool|object
+     */
+    public function get($id)
+    {
+        $data = new \stdClass();
+        $data->category_id = $id;
+        return $this->doRequest('whitelabel/category/get', $data);
+    }
+
 }

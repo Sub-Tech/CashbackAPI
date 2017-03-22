@@ -13,6 +13,7 @@ trait AddRestrictionTrait
 {
 
     public $addRestrictionPath;
+    public static $restrictionTypes = [];
 
     /**
      * @param bool $withDescription
@@ -20,9 +21,12 @@ trait AddRestrictionTrait
      */
     public function getRestrictionTypes($withDescription = false)
     {
+        if (isset(self::$restrictionTypes[(int)$withDescription])) {
+            return self::$restrictionTypes[(int)$withDescription];
+        }
         $data = new \stdClass();
         $data->with_description = $withDescription;
-        return $this->doRequest($this->addRestrictionPath . '/restrictions/get-types', $data);
+        return self::$restrictionTypes[(int)$withDescription] = $this->doRequest($this->addRestrictionPath . '/restrictions/get-types', $data);
     }
 
     /**
